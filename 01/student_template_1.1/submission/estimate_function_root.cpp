@@ -59,18 +59,20 @@ float estimateFunctionRoot(float (*linearFunc)(float), float xLower,
   }
 
   // interval boundaries are not the root. estimate...
-  // visualization: https://www.desmos.com/calculator/xuu37bzi8v
 
   // sanity checks
-  if (isAlmostEqual(x1, x2)) {
-    // the interval is degenerate
+  if (isAlmostEqual(y1, y2)) {
+    // line is horizontal or points are equal. in both cases, the x axis is not
+    // intersected
     return NAN;
   }
 
-  if (isAlmostEqual(y1, y2)) {
-    // the line is horizontal: it does not intersect the x axis
-    return NAN;
+  if (isAlmostEqual(x1, x2)) {
+    // line is vertical
+    return x1;
   }
+
+  // visualization: https://www.desmos.com/calculator/xuu37bzi8v
 
   // find `m` and `c` for `y = m * x + c`
   float m = (y2 - y1) / (x2 - x1);
