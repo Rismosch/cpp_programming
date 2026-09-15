@@ -58,12 +58,13 @@ float estimateFunctionRoot(float (*linearFunc)(float), float xLower,
     return x2;
   }
 
-  // interval boundaries are not the root. estimate...
+  // interval boundaries are not the root. estimate by finding the intersection
+  // of the x axis...
 
   // sanity checks
   if (isAlmostEqual(y1, y2)) {
-    // line is horizontal or points are equal. in both cases, the x axis is not
-    // intersected
+    // line is horizontal or the points may be equal. in both cases, the x axis
+    // is not intersected
     return NAN;
   }
 
@@ -200,7 +201,7 @@ void testEstimateFunctionRoot() {
 
   // Test vertical line
   std::cout << "vertical)\n";
-  float vertical_result = estimateFunctionRoot(verticalFunc, 0.0f, 2.0f, 5);
+  float vertical_result = estimateFunctionRoot(verticalFunc, 3.0f, 3.0f, 5);
   std::cout << "result: " << vertical_result << "\n";
   std::cout << "\n";
 }
