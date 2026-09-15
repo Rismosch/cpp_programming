@@ -36,8 +36,7 @@ bool isAlmostEqual(float x1, float x2, float epsilon = 1.0e-5f) {
   return std::abs(x1 - x2) <= epsilon;
 }
 
-/* TODO: 1c-f)
-Estimates the root, the x, of the linear function that is f(x)=0 within the
+/* Estimates the root, the x, of the linear function that is f(x)=0 within the
 specified interval [xLower, xUpper]. If the root is equal to the interval bounds
 or the midpoint it returns the corresponding x-value. If the root is estimated
 (the intervall becomes small enough) the resulting x-value is rounded to n
@@ -45,8 +44,8 @@ decimal places. If linear function in the specified interval does not have a
 root, it returns NAN. */
 float estimateFunctionRoot(float (*linearFunc)(float), float xLower,
                            float xUpper, unsigned int nDecimals) {
-  float x1 = xLower;
-  float x2 = xUpper;
+  float x1 = std::min(xLower, xUpper);
+  float x2 = std::max(xLower, xUpper);
   float y1 = linearFunc(x1);
   float y2 = linearFunc(x2);
 
@@ -60,11 +59,12 @@ float estimateFunctionRoot(float (*linearFunc)(float), float xLower,
   }
 
   // interval boundaries are not the root. estimate...
+  // visualization: https://www.desmos.com/calculator/xuu37bzi8v
 
   // sanity checks
   if (isAlmostEqual(x1, x2)) {
-    // the line is vertical
-    return x1;
+    // the interval is degenerate
+    return NAN;
   }
 
   if (isAlmostEqual(y1, y2)) {
@@ -86,7 +86,6 @@ float estimateFunctionRoot(float (*linearFunc)(float), float xLower,
 
   // round
   float result = roundValToNDecimals(root, nDecimals);
-  std::cout << "$$$" << root << "," << result << "," << nDecimals << "$$$";
   return result;
 }
 
@@ -159,6 +158,8 @@ void testEstimateFunctionRoot() {
   // Test 1c) Estimate rounded
   std::cout << "1c)\n";
   testAndPrintIncreasing(0.01f, 1.5f);
+  std::cout << "check inverted parameters...\n";
+  testAndPrintIncreasing(0.15f, 0.01f);
   std::cout << "\n";
 
   // Test 1d) Special cases: xUpper, xLower, midPoint (no rounding necessary)
