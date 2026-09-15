@@ -1,3 +1,6 @@
+// Eric Berger      7064584
+// Simon Sutoris    7542170
+
 // estimate_function_root.cpp - student template:
 // Estimate the root (or x) of a given linear function, that is, f(x) = 0 using
 // intervall bisection.
@@ -23,10 +26,9 @@ float horizontalFunc(float) { return 5.0f; }
 
 /* Rounds a float value to n decimal places. E.g. val=1.555, n=2 returns 1.56*/
 float roundValToNDecimals(float val, unsigned int n) {
-  double t = std::pow(10, n);
-  double promoted = static_cast<double>(val);
-  double result = std::round(t * promoted) / t;
-  return static_cast<float>(result);
+  float exp = static_cast<float>(std::pow(10.0f, n));
+  float result = std::round(val * exp) / exp;
+  return result;
 }
 
 /* Returns true if the absolute difference of x1 and x2 is smaller or equal than
