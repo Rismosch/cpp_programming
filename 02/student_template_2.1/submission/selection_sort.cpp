@@ -10,9 +10,6 @@
 using time_point = std::chrono::time_point<std::chrono::high_resolution_clock>;
 using duration_ms = std::chrono::duration<double, std::milli>;
 
-///* Constant array size of n = 5000 elements for testing purpose */
-// const int num_array_elements = 5000;
-
 /* Generates an integer array with constant n=5000 elements */
 int *generateArray(int start, int step, size_t count) {
   int *arr = new int[count];
