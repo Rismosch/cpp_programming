@@ -26,7 +26,7 @@ add_library(submission SHARED
   submission/Bacterium.cpp
   submission/DeadCell.cpp
   submission/Food.cpp
-  submission/Food.cpp
+  submission/Virus.cpp
 )
 target_include_directories(submission PRIVATE lib/)
 target_include_directories(submission PRIVATE include/)
