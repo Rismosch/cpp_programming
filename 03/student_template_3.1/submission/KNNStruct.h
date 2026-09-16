@@ -63,7 +63,7 @@ struct KnnDistance {
   std::pair<DYNPoint, unsigned int> dataPoint;
   float distance;
 
-  const static bool compare(KnnDistance lhs, KnnDistance rhs) {
+  static bool compare(KnnDistance lhs, KnnDistance rhs) {
     return lhs.distance < rhs.distance;
   }
 };
@@ -103,7 +103,7 @@ struct KNN {
     // sort by distance
     std::sort(distances.begin(), distances.end(), KnnDistance::compare);
 
-    // count classes
+    // count classes, but only the k nearest
     std::unordered_map<unsigned int, size_t> classes; // <class, count>
 
     for (unsigned int i = 0; i < k; ++i) {
@@ -116,7 +116,7 @@ struct KNN {
       }
     }
 
-    // find max
+    // find which class was counted the most
     auto it = classes.begin();
     unsigned int candidate = it->first;
     size_t max_count = it->second;
@@ -161,21 +161,33 @@ void createDataset(std::vector<std::pair<DYNPoint, unsigned int>> &dataset,
                    const unsigned int point_size, const int minimum,
                    const int maximum) {
 
-  if (amount > 0 && point_size > 0 && minimum <= maximum) {
+  if (amount == 0 || point_size == 0 || minimum > maximum) {
+    return;
+  }
 
-    // STUDENT TODO: your code
+  dataset.clear();
+  dataset.reserve(amount);
+
+  for (unsigned int i = 0; i < amount; ++i) {
+    DYNPoint point = DYNPoint::createRandomPoint(point_size, minimum, maximum);
+    dataset.push_back({point, class_label});
   }
 }
 
 void evaluateKNN(const std::vector<std::pair<DYNPoint, unsigned int>> &dataset,
                  const KNN &Classifier, const unsigned int k) {
-  if (!dataset.empty()) {
-    float acc = 0;
-    for (size_t i = 0; i < dataset.size(); i++) {
-      if (static_cast<unsigned int>(Classifier.classify(k, dataset[i].first)) ==
-          dataset[i].second)
-        acc++;
-    }
-    std::cout << "Accuracy: " << acc / float(dataset.size()) << std::endl;
+  if (dataset.empty()) {
+    return;
   }
+
+  float acc = 0;
+  for (size_t i = 0; i < dataset.size(); i++) {
+    auto c =
+        static_cast<unsigned int>(Classifier.classify(k, dataset[i].first));
+    std::cout << "class: " << c << "\n";
+    if (c == dataset[i].second)
+      acc++;
+  }
+
+  std::cout << "acc: " << acc << "\n";
 }

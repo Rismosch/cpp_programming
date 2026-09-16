@@ -11,8 +11,6 @@ int main() {
   B = DYNPoint::createRandomPoint(50, -5000, 5000);
   C = DYNPoint::createRandomPoint(50, -5000, 5000);
 
-  return 0;
-
   std::vector<std::pair<DYNPoint, unsigned int>> trainA, testA;
 
   createDataset(trainA, 100, 1, 50, -5000, 5000);
@@ -30,13 +28,15 @@ int main() {
   KNNB.TrainKNN(trainA);
 
   for (unsigned int i = 1; i <= 10; i++) {
-    std::cout << "K: " << i << " train error" << std::endl;
+    std::cout << "K: " << i << " train error\n";
     evaluateKNN(trainA, KNNA, i);
     evaluateKNN(trainA, KNNB, i);
 
-    std::cout << "K: " << i << " test error" << std::endl;
+    std::cout << "K: " << i << " test error\n";
     evaluateKNN(testA, KNNA, i);
     evaluateKNN(testA, KNNB, i);
+
+    break;
   }
 
   return 0;
