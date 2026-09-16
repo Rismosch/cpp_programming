@@ -46,7 +46,6 @@ struct KNN {
 		int class_label = -1;
 
 		if (k && function_ptr_Distance && trainingData.size()) {
-			// STUDENT TODO: your code
 			size_t dataset_size = trainingData.size();
 			std::vector<unsigned int> labels(k);
 			std::vector<float> distances(dataset_size);
@@ -95,7 +94,6 @@ struct KNN {
 };
 
 float DistanceManhattan(const DYNPoint &A, const DYNPoint &B) {
-	// STUDENT TODO: your code
 	size_t size = A.data.size();
 	float sum = 0.0f;
 	for (size_t i=0; i<size; i++)
@@ -106,7 +104,6 @@ float DistanceManhattan(const DYNPoint &A, const DYNPoint &B) {
 }
 
 float DistanceEuclid(const DYNPoint &A, const DYNPoint &B) {
-	// STUDENT TODO: your code
 	size_t size = A.data.size();
 	float sum = 0.0f;
 	for (size_t i=0; i<size; i++)
@@ -122,7 +119,6 @@ void createDataset(std::vector<std::pair<DYNPoint, unsigned int>> &dataset, cons
 				const unsigned int point_size, const int minimum, const int maximum) {
 	
 	if (amount > 0 && point_size>0 && minimum <= maximum) {
-	// STUDENT TODO: your code
 	dataset.reserve(dataset.size() + amount);
 	for (unsigned int i=0; i<amount; i++)
 	{
