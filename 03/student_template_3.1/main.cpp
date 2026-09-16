@@ -11,9 +11,13 @@ int main() {
   B = DYNPoint::createRandomPoint(50, -5000, 5000);
   C = DYNPoint::createRandomPoint(50, -5000, 5000);
 
-  for (auto it = A.data.begin(); it != A.data.end(); ++it) {
-    std::cout << *it << "\n";
-  }
+  std::cout << DistanceManhattan(A, B) << "\n";
+  std::cout << DistanceManhattan(A, C) << "\n";
+  std::cout << DistanceManhattan(B, C) << "\n";
+
+  std::cout << DistanceEuclid(A, B) << "\n";
+  std::cout << DistanceEuclid(A, C) << "\n";
+  std::cout << DistanceEuclid(B, C) << "\n";
 
   return 0;
 

@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
@@ -84,17 +85,28 @@ struct KNN {
 };
 
 float DistanceManhattan(const DYNPoint &A, const DYNPoint &B) {
+  assert(A.data.size() == B.data.size());
 
-  // STUDENT TODO: your code
+  float sum = 0;
 
-  return 0;
+  for (size_t i = 0; i < A.data.size(); ++i) {
+    sum += std::abs(A.data[i] - B.data[i]);
+  }
+
+  return sum / static_cast<float>(A.data.size());
 }
 
 float DistanceEuclid(const DYNPoint &A, const DYNPoint &B) {
+  assert(A.data.size() == B.data.size());
 
-  // STUDENT TODO: your code
+  float sum = 0;
 
-  return 0;
+  for (size_t i = 0; i < A.data.size(); ++i) {
+    float diff = A.data[i] - B.data[i];
+    sum += diff * diff;
+  }
+
+  return std::sqrt(sum / static_cast<float>(A.data.size()));
 }
 
 void createDataset(std::vector<std::pair<DYNPoint, unsigned int>> &dataset,
