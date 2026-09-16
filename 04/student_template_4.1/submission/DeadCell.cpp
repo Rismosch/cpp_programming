@@ -1,11 +1,7 @@
 #include "DeadCell.h"
-// TODO: task c)
+
 DeadCell::DeadCell(double health_, double power_, double defence_)
-    : Food(health_, power_, defence_, 0, 0)
-// Your Code
-{
-  // Your Code
-}
+    : Food(health_, power_, defence_, 10.0, 100.0) {}
 
 DeadCell::~DeadCell() {}
 // TODO: task k)
