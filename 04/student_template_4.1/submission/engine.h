@@ -4,23 +4,25 @@
 
 // own classes
 #include "Amoeba.h"
-#include "DeadCell.h"
 #include "Bacterium.h"
+#include "DeadCell.h"
 #include "Virus.h"
 
 // STL classes
 #include <vector>
 
 double random_value(double difficulty = 1.0) {
-  return (double((std::rand() % 800) + 100) / 1000.0) * difficulty; // [0.1 .. 0.899] * difficulty
+  return (double((std::rand() % 800) + 100) / 1000.0) *
+         difficulty; // [0.1 .. 0.899] * difficulty
 }
 
 bool combat(Amoeba *player, Food *enemy) {
-  std::cout << "\n+++++++++++++++++++++++++ new round ++++++++++++++++++++++++\n"
-            << std::endl; 
+  std::cout
+      << "\n+++++++++++++++++++++++++ new round ++++++++++++++++++++++++\n"
+      << std::endl;
 
   unsigned int turn = 0;
-  
+
   bool player_won{false};
 
   if (player && enemy) {
@@ -33,10 +35,11 @@ bool combat(Amoeba *player, Food *enemy) {
     // fight until either player or enemy lost
     while (player->is_alive() && enemy->is_alive()) {
       turn++;
-      
+
       // player attacks first
       enemy->attacked([player](double &health, double defence) {
-        double damage = random_value() * player->get_power() - random_value() * defence;
+        double damage =
+            random_value() * player->get_power() - random_value() * defence;
         if (damage > 0.0) {
           health -= damage;
         }
@@ -44,7 +47,8 @@ bool combat(Amoeba *player, Food *enemy) {
 
       // enemy attacks second
       player->attacked([enemy](double &health, double defence) {
-        double damage = random_value() * enemy->get_power() - random_value() * defence;
+        double damage =
+            random_value() * enemy->get_power() - random_value() * defence;
         if (damage > 0.0) {
           health -= damage; // player's health
         }
@@ -60,32 +64,32 @@ bool combat(Amoeba *player, Food *enemy) {
 
     player_won = (player->is_alive() && !enemy->is_alive());
 
-    if (player_won)
-    {
+    if (player_won) {
       player->eat(enemy->get_health_gain(), enemy->get_dna_gain());
     }
   }
 
-  std::cout << "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
-            << std::endl; 
+  std::cout
+      << "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
+      << std::endl;
 
   return player_won;
 }
 
-void engine()
-{
+void engine() {
   std::cout << "Start game!" << std::endl;
 
   double difficulty{1.0};
 
-  // create the player  
+  // create the player
   Amoeba player;
 
   // while player is still alive: fight!
   while (player.is_alive()) {
     std::cout << "Difficulty: " << difficulty << std::endl;
 
-    // define a vector with distinct enemies (DeadCell, Bacterium, ...) which are the competitors and available to fight in this round
+    // define a vector with distinct enemies (DeadCell, Bacterium, ...) which
+    // are the competitors and available to fight in this round
     std::vector<Food *> all_enemies;
     all_enemies.push_back(new DeadCell(random_value(difficulty) * 10.0,
                                        random_value(difficulty) * 0.0,
@@ -98,13 +102,15 @@ void engine()
     all_enemies.push_back(new Virus(random_value(difficulty) * 500.0,
                                     random_value(difficulty) * 25.0,
                                     random_value(difficulty) * 25.0));
-    if(all_enemies.empty()) return;
+    if (all_enemies.empty())
+      return;
 
     player.print_header();
     player.print();
     std::cout << "\n";
 
-    // deep copy (one to three) random competitor the player can fight in this round. Duplicates are allowed.
+    // deep copy (one to three) random competitor the player can fight in this
+    // round. Duplicates are allowed.
     std::vector<Food *> enemy;
     int count = std::rand() % 3 + 1;
     for (int i = 0; i < count; i++) {
@@ -113,8 +119,10 @@ void engine()
     }
 
     // print number of enemies selected for this round
-    std::cout << std::setw(10) << "Select" << " : ";
-    enemy[0]->print_header(); // only print header of first entry to reduce output in InfoMark
+    std::cout << std::setw(10) << "Select"
+              << " : ";
+    enemy[0]->print_header(); // only print header of first entry to reduce
+                              // output in InfoMark
     for (size_t i = 0; i < enemy.size(); i++) {
       std::cout << std::setw(10) << i << " : ";
       enemy[i]->print();
@@ -129,7 +137,7 @@ void engine()
     combat(&player, enemy[selection]);
 
     difficulty += 1.0;
-    
+
     for (Food *e : all_enemies) {
       delete e;
     }
@@ -140,5 +148,6 @@ void engine()
     }
     enemy.clear();
   }
-	std::cout << "Player reached difficulty level (round): " << difficulty << std::endl;
+  std::cout << "Player reached difficulty level (round): " << difficulty
+            << std::endl;
 }

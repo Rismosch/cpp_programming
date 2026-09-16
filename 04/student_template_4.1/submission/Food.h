@@ -10,14 +10,15 @@
 class Food {
 public:
   // constructor
-  Food(double health_, double power_, double defence_, double health_gain_, double dna_gain_);
+  Food(double health_, double power_, double defence_, double health_gain_,
+       double dna_gain_);
 
   // destructor
   virtual ~Food();
 
   virtual void attacked(std::function<void(double &, double)> attack_function);
 
-  virtual Food *clone() const  = 0; // used to make polymorphic copies
+  virtual Food *clone() const = 0; // used to make polymorphic copies
 
   bool is_alive(); // alive if health > 0.0
 

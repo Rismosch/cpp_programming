@@ -1,15 +1,10 @@
 // Simon Sutoris 7542170
 // Eric Berger 7064584
 #include "DeadCell.h"
-//TODO: task c)
 DeadCell::DeadCell(double health_, double power_, double defence_)
-  : Food(health_, power_, defence_, 10.0, 100.0)
-{
-  name="DeadCell";
+    : Food(health_, power_, defence_, 10.0, 100.0) {
+  name = "DeadCell";
 }
 
 DeadCell::~DeadCell() {}
-//TODO: task k)
-Food *DeadCell::clone() const {
-  return new DeadCell(*this);
-}
+Food *DeadCell::clone() const { return new DeadCell(*this); }

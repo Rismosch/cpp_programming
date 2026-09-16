@@ -1,18 +1,9 @@
 
 #include "submission/engine.h"
 
+int main() {
 
+  engine();
 
-
-
-int main()
-{
-
-	engine();
-
-
-	return 0;
-
-
+  return 0;
 }
-
