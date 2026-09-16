@@ -1,8 +1,10 @@
+#include <algorithm>
 #include <assert.h>
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <stdlib.h>
+#include <unordered_map>
 #include <vector>
 
 /* returns a random float between 0.0f and 1.0f */
@@ -57,6 +59,15 @@ struct DYNPoint {
   }
 };
 
+struct KnnDistance {
+  std::pair<DYNPoint, unsigned int> dataPoint;
+  float distance;
+
+  const static bool compare(KnnDistance lhs, KnnDistance rhs) {
+    return lhs.distance < rhs.distance;
+  }
+};
+
 struct KNN {
   KNN(float (*_function_ptr_Distance)(const DYNPoint &, const DYNPoint &))
       : function_ptr_Distance(_function_ptr_Distance) {}
@@ -74,13 +85,49 @@ struct KNN {
 
   int classify(const unsigned int k, const DYNPoint &A) const {
 
-    int class_label = -1;
-
-    if (k && function_ptr_Distance && trainingData.size()) {
-
-      // STUDENT TODO: your code
+    if (!k || !function_ptr_Distance || !trainingData.size()) {
+      return -1;
     }
-    return class_label;
+
+    // compute the distances
+    std::vector<KnnDistance> distances;
+    distances.reserve(trainingData.size());
+
+    for (auto dataPoint : this->trainingData) {
+      KnnDistance distance;
+      distance.dataPoint = dataPoint;
+      distance.distance = function_ptr_Distance(A, dataPoint.first);
+      distances.push_back(distance);
+    }
+
+    // sort by distance
+    std::sort(distances.begin(), distances.end(), KnnDistance::compare);
+
+    // count classes
+    std::unordered_map<unsigned int, size_t> classes; // <class, count>
+
+    for (unsigned int i = 0; i < k; ++i) {
+      auto c = distances[i].dataPoint.second;
+      auto entry = classes.find(c);
+      if (entry != classes.end()) {
+        entry->second += 1;
+      } else {
+        classes.insert({c, 1});
+      }
+    }
+
+    // find max
+    auto it = classes.begin();
+    unsigned int candidate = it->first;
+    size_t max_count = it->second;
+    for (++it; it != classes.end(); ++it) {
+      if (it->second > max_count) {
+        candidate = it->first;
+        max_count = it->second;
+      }
+    }
+
+    return static_cast<int>(candidate);
   }
 };
 
