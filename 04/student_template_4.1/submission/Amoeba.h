@@ -14,7 +14,11 @@ public:
 
   void eat(double health, double dna);
 
+  // print variable names and values
+  void print_header() override;
+  void print() override;
+
 protected:
   double dna_level{};
-  // TODO: task f)
+  double dna_level_th{100.0};
 };
