@@ -16,7 +16,6 @@ struct DYNPoint {
                                                   int maximum = 5000) {
     DYNPoint p;
     if (size > 0 && minimum <= maximum) {
-      // STUDENT TODO: add your code
       p.data.reserve(size);
       int range = maximum - minimum;
       for (unsigned int i = 0; i < size; i++) {
