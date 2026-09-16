@@ -1,8 +1,12 @@
+// Simon Sutoris 7542170
+// Eric Berger 7064584
 #pragma once
 
 // own classes
 #include "Amoeba.h"
 #include "DeadCell.h"
+#include "Bacterium.h"
+#include "Virus.h"
 
 // STL classes
 #include <vector>
@@ -31,10 +35,20 @@ bool combat(Amoeba *player, Food *enemy) {
       turn++;
       
       // player attacks first
-      enemy->attacked(0); // Your Code here
+      enemy->attacked([player](double &health, double defence) {
+        double damage = random_value() * player->get_power() - random_value() * defence;
+        if (damage > 0.0) {
+          health -= damage;
+        }
+      });
 
       // enemy attacks second
-      player->attacked(0); // Your Code here
+      player->attacked([enemy](double &health, double defence) {
+        double damage = random_value() * enemy->get_power() - random_value() * defence;
+        if (damage > 0.0) {
+          health -= damage; // player's health
+        }
+      });
 
       // print enemy and player information for this turn
       std::cout << "---------- turn: " << turn << " -----------" << std::endl;
@@ -65,7 +79,7 @@ void engine()
   double difficulty{1.0};
 
   // create the player  
-  Amoeba player(0,0,0,0); // Your Code here
+  Amoeba player;
 
   // while player is still alive: fight!
   while (player.is_alive()) {
@@ -73,7 +87,17 @@ void engine()
 
     // define a vector with distinct enemies (DeadCell, Bacterium, ...) which are the competitors and available to fight in this round
     std::vector<Food *> all_enemies;
-    // Your Code here
+    all_enemies.push_back(new DeadCell(random_value(difficulty) * 10.0,
+                                       random_value(difficulty) * 0.0,
+                                       random_value(difficulty) * 0.0));
+
+    all_enemies.push_back(new Bacterium(random_value(difficulty) * 200.0,
+                                        random_value(difficulty) * 10.0,
+                                        random_value(difficulty) * 50.0));
+
+    all_enemies.push_back(new Virus(random_value(difficulty) * 500.0,
+                                    random_value(difficulty) * 25.0,
+                                    random_value(difficulty) * 25.0));
     if(all_enemies.empty()) return;
 
     player.print_header();
@@ -82,7 +106,11 @@ void engine()
 
     // deep copy (one to three) random competitor the player can fight in this round. Duplicates are allowed.
     std::vector<Food *> enemy;
-    // Your Code here
+    int count = std::rand() % 3 + 1;
+    for (int i = 0; i < count; i++) {
+      size_t index = std::rand() % all_enemies.size();
+      enemy.push_back(all_enemies[index]->clone());
+    }
 
     // print number of enemies selected for this round
     std::cout << std::setw(10) << "Select" << " : ";
@@ -102,8 +130,15 @@ void engine()
 
     difficulty += 1.0;
     
-    // Your Code here
-    // Hint: don't forget to free dynamically allocated objects!
+    for (Food *e : all_enemies) {
+      delete e;
+    }
+    all_enemies.clear();
+
+    for (Food *e : enemy) {
+      delete e;
+    }
+    enemy.clear();
   }
 	std::cout << "Player reached difficulty level (round): " << difficulty << std::endl;
 }
