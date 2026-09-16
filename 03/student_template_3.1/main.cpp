@@ -11,6 +11,12 @@ int main() {
   B = DYNPoint::createRandomPoint(50, -5000, 5000);
   C = DYNPoint::createRandomPoint(50, -5000, 5000);
 
+  for (auto it = A.data.begin(); it != A.data.end(); ++it) {
+    std::cout << *it << "\n";
+  }
+
+  return 0;
+
   std::vector<std::pair<DYNPoint, unsigned int>> trainA, testA;
 
   createDataset(trainA, 100, 1, 50, -5000, 5000);

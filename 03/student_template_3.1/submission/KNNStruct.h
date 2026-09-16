@@ -1,6 +1,32 @@
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
+#include <stdlib.h>
 #include <vector>
+
+/* returns a random float between 0.0f and 1.0f */
+float random_float() {
+  return static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
+}
+
+/* returns a random float between bounds. bounds are inclusive */
+float random_float_between(float min, float max) {
+  // sanity check if bounds are correct
+  if (max <= min) {
+    if (max == min) {
+      return min;
+    } else {
+      return NAN;
+    }
+  }
+
+  // generate random number and map into range
+  auto x = random_float();
+  auto r = (max - min) * x + min;
+
+  // in some edgecases, r might be larger than max. in this case, clamp r to max
+  return r > max ? max : r;
+}
 
 struct DYNPoint {
   std::vector<float> data;
@@ -13,9 +39,19 @@ struct DYNPoint {
                                                   int minimum = -5000,
                                                   int maximum = 5000) {
     DYNPoint p;
-    if (size > 0 && minimum <= maximum) {
-      // STUDENT TODO: add your code
+
+    if (size == 0 || minimum > maximum) {
+      return p;
     }
+
+    p.data.reserve(size);
+
+    for (unsigned int i = 0; i < size; ++i) {
+      float point = random_float_between(static_cast<float>(minimum),
+                                         static_cast<float>(maximum));
+      p.data.push_back(point);
+    }
+
     return p;
   }
 };
