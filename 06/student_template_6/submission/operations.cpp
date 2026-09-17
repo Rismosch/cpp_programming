@@ -21,8 +21,7 @@ And::And(const Shape &shape_a, const Shape &shape_b)
     : Operation(shape_a, shape_b) {}
 
 Shape And::clone_impl() const {
-  auto copy = std::make_shared<And>(sub_shape_a.clone(), sub_shape_b.clone());
-  return {copy};
+  return {std::make_shared<And>(sub_shape_a.clone(), sub_shape_b.clone())};
 }
 
 bool And::isInside_impl(const Point3D &p) const {
@@ -36,8 +35,7 @@ Or::Or(const Shape &shape_a, const Shape &shape_b)
     : Operation(shape_a, shape_b) {}
 
 Shape Or::clone_impl() const {
-  auto copy = std::make_shared<Or>(sub_shape_a.clone(), sub_shape_b.clone());
-  return {copy};
+  return {std::make_shared<Or>(sub_shape_a.clone(), sub_shape_b.clone())};
 }
 
 bool Or::isInside_impl(const Point3D &p) const {
@@ -51,8 +49,7 @@ Xor::Xor(const Shape &shape_a, const Shape &shape_b)
     : Operation(shape_a, shape_b) {}
 
 Shape Xor::clone_impl() const {
-  auto copy = std::make_shared<Xor>(sub_shape_a.clone(), sub_shape_b.clone());
-  return {copy};
+  return {std::make_shared<Xor>(sub_shape_a.clone(), sub_shape_b.clone())};
 }
 
 bool Xor::isInside_impl(const Point3D &p) const {
@@ -65,8 +62,7 @@ bool Xor::isInside_impl(const Point3D &p) const {
 Not::Not(const Shape &shape) : Operation(shape, {std::make_shared<Empty>()}) {}
 
 Shape Not::clone_impl() const {
-  auto copy = std::make_shared<Not>(sub_shape_a.clone());
-  return {copy};
+  return {std::make_shared<Not>(sub_shape_a.clone())};
 }
 
 bool Not::isInside_impl(const Point3D &p) const {

@@ -85,6 +85,21 @@ Shape Shape::operator+(const Shape &other) const { return *this | other; }
 Shape Shape::operator-(const Shape &other) const { return *this & !other; }
 
 //------------------------------------------------------------------------------
+// Shape Transformations
+//------------------------------------------------------------------------------
+Shape Shape::scaled(Point3D factor) const {
+  return std::make_shared<Scaled>(*this, factor)->clone();
+}
+
+Shape Shape::translated(Point3D offset) const {
+  return std::make_shared<Translated>(*this, offset)->clone();
+}
+
+Shape Shape::rotated(Axis axis, float angle) const {
+  return std::make_shared<Rotated>(*this, axis, angle)->clone();
+}
+
+//------------------------------------------------------------------------------
 // Empty
 //------------------------------------------------------------------------------
 Shape Empty::clone_impl() const { return {std::make_shared<Empty>()}; }
