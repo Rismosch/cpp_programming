@@ -54,5 +54,5 @@ public:
 private:
   // The histogram data is represented as map from word to probability (sorted)
   std::map<const std::string, double> histogram;
-  std::vector<std::pair<double, std::string>> sorted_probabilities;
+  std::multimap<double, const std::string, std::greater<double>> probabilities;
 };
