@@ -67,24 +67,18 @@ bool Shape::isInside_impl(const Point3D &) const {
 // Shape Operators
 //------------------------------------------------------------------------------
 Shape Shape::operator&(const Shape &other) const {
-  auto operation = std::make_shared<And>(*this, other);
-  return {operation};
+  return std::make_shared<And>(*this, other)->clone();
 }
 
 Shape Shape::operator|(const Shape &other) const {
-  auto operation = std::make_shared<Or>(*this, other);
-  return {operation};
+  return std::make_shared<Or>(*this, other)->clone();
 }
 
 Shape Shape::operator^(const Shape &other) const {
-  auto operation = std::make_shared<Xor>(*this, other);
-  return {operation};
+  return std::make_shared<Xor>(*this, other)->clone();
 }
 
-Shape Shape::operator!() const {
-  auto operation = std::make_shared<Not>(*this);
-  return {operation};
-}
+Shape Shape::operator!() const { return std::make_shared<Not>(*this)->clone(); }
 
 Shape Shape::operator+(const Shape &other) const { return *this | other; }
 
