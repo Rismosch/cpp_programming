@@ -65,7 +65,7 @@ double Histogram::dissimilarity(const Histogram &other) const {
   double abs_B = static_cast<double>(B.size());
   double abs_S = 0.0; // computed below
 
-  double sum;
+  double sum = 0.0;
   for (const auto &[w, probability_A] : A) {
     auto entry_B = B.find(w);
     if (entry_B == B.end()) {
@@ -81,4 +81,21 @@ double Histogram::dissimilarity(const Histogram &other) const {
   return (1 - abs_S / abs_A) + (1 - abs_S / abs_B) + sum;
 }
 
-// TODO 5.1.d
+size_t Histogram::closest(const std::vector<Histogram> &candidates) const {
+  if (candidates.empty()) {
+    // candidates empty, return error value
+    return ~size_t{0};
+  }
+
+  size_t lowest_index = 0;
+  double lowest_dissimilarity = this->dissimilarity(candidates[0]);
+  for (size_t i = 1; i < candidates.size(); ++i) {
+    double dissimilarity = this->dissimilarity(candidates[1]);
+    if (dissimilarity < lowest_dissimilarity) {
+      lowest_index = i;
+      lowest_dissimilarity = dissimilarity;
+    }
+  }
+
+  return lowest_index;
+}

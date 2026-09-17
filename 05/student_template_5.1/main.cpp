@@ -65,7 +65,6 @@ int main() {
   std::cout << "Difference between book0 and book3: "
             << hist0.dissimilarity(hist3) << "\n\n";
 
-  /* TODO: 5.1.d) Uncomment this after implementing 'closest()'
   // most similar histograms
   std::cout << "Similarity of books based on histograms:\n";
   const std::string book0_candidates[] = {"Book1", "Book2", "Book3"};
@@ -83,7 +82,6 @@ int main() {
   const std::string book3_candidates[] = {"Book0", "Book1", "Book2"};
   std::cout << "Book3 ist closest to "
             << book3_candidates[hist3.closest({hist0, hist1, hist2})] << "\n";
-  */
 
   return EXIT_SUCCESS;
 }
