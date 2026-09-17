@@ -1,10 +1,15 @@
 #include "shapes.h"
 
 #include "operations.h"
+#include "point3d.h"
 #include "transformations.h"
 
+#include <memory>
 #include <stdexcept>
 
+//------------------------------------------------------------------------------
+// Shape
+//------------------------------------------------------------------------------
 Shape::Shape(std::shared_ptr<Shape> &&shape) noexcept
     : instance{std::move(shape)} // take ownership
 {}
@@ -55,14 +60,49 @@ bool Shape::isInside_impl(const Point3D &) const {
   throw std::logic_error("isInside called on an abstract shape");
 }
 
+//------------------------------------------------------------------------------
+// Empty
+//------------------------------------------------------------------------------
 Shape Empty::clone_impl() const { return {std::make_shared<Empty>()}; }
 
 bool Empty::isInside_impl(const Point3D &) const { return false; }
 
 AABB Empty::getBounds_impl() const { return AABB{}; }
 
+//------------------------------------------------------------------------------
+// Cube
+//------------------------------------------------------------------------------
 Shape Cube::clone_impl() const { return {std::make_shared<Cube>()}; }
 
 bool Cube::isInside_impl(const Point3D &p) const {
   return getBounds().contains(p);
+}
+
+//------------------------------------------------------------------------------
+// Sphere
+//------------------------------------------------------------------------------
+Shape Sphere::clone_impl() const { return {std::make_shared<Sphere>()}; }
+
+bool Sphere::isInside_impl(const Point3D &p) const {
+  return std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z) <= 1;
+}
+
+//------------------------------------------------------------------------------
+// Cylinder
+//------------------------------------------------------------------------------
+Shape Cylinder::clone_impl() const { return {std::make_shared<Cylinder>()}; }
+
+bool Cylinder::isInside_impl(const Point3D &p) const {
+  return std::sqrt(p.x * p.x + p.y * p.y) <= 1 && p.z <= 1;
+}
+
+//------------------------------------------------------------------------------
+// Octahedron
+//------------------------------------------------------------------------------
+Shape Octahedron::clone_impl() const {
+  return {std::make_shared<Octahedron>()};
+}
+
+bool Octahedron::isInside_impl(const Point3D &p) const {
+  return std::abs(p.x) + std::abs(p.y) + std::abs(p.z) <= 1;
 }

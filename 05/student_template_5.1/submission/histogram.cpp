@@ -90,7 +90,7 @@ size_t Histogram::closest(const std::vector<Histogram> &candidates) const {
   size_t lowest_index = 0;
   double lowest_dissimilarity = this->dissimilarity(candidates[0]);
   for (size_t i = 1; i < candidates.size(); ++i) {
-    double dissimilarity = this->dissimilarity(candidates[1]);
+    double dissimilarity = this->dissimilarity(candidates[i]);
     if (dissimilarity < lowest_dissimilarity) {
       lowest_index = i;
       lowest_dissimilarity = dissimilarity;
