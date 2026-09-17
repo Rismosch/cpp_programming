@@ -48,7 +48,8 @@ public:
   std::vector<std::pair<double, std::string>>
   most_common_words(unsigned int n_words) const;
 
-  // TODO 5.1.c
+  double dissimilarity(const Histogram &other) const;
+
   // TODO 5.1.d
 
 private:

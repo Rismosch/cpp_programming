@@ -59,12 +59,11 @@ int main() {
   }
   std::cout << "\n";
 
-  /* TODO 5.1.c) Uncomment this after implementing 'dissimilarity()'
   // similarity between book0 and book1
-  std::cout << "Difference between book0 and book1: " <<
-  hist0.dissimilarity(hist1) << "\n"; std::cout << "Difference between book0 and
-  book3: " << hist0.dissimilarity(hist3) << "\n\n";
-  */
+  std::cout << "Difference between book0 and book1: "
+            << hist0.dissimilarity(hist1) << "\n";
+  std::cout << "Difference between book0 and book3: "
+            << hist0.dissimilarity(hist3) << "\n\n";
 
   /* TODO: 5.1.d) Uncomment this after implementing 'closest()'
   // most similar histograms

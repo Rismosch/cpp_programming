@@ -57,5 +57,28 @@ Histogram::most_common_words(unsigned int n_words) const {
   return result;
 }
 
-// TODO 5.1.c
+double Histogram::dissimilarity(const Histogram &other) const {
+  auto &A = this->histogram;
+  auto &B = other.histogram;
+
+  double abs_A = static_cast<double>(A.size());
+  double abs_B = static_cast<double>(B.size());
+  double abs_S = 0.0; // computed below
+
+  double sum;
+  for (const auto &[w, probability_A] : A) {
+    auto entry_B = B.find(w);
+    if (entry_B == B.end()) {
+      continue;
+    }
+
+    double probability_B = entry_B->second;
+
+    sum += std::abs(probability_A - probability_B);
+    abs_S += 1;
+  }
+
+  return (1 - abs_S / abs_A) + (1 - abs_S / abs_B) + sum;
+}
+
 // TODO 5.1.d
