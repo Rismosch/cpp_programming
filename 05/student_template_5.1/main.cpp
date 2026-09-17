@@ -23,7 +23,6 @@ int main() {
   std::cout << "Book3 has " << book3.size() << " words."
             << "\n\n";
 
-  // TODO: this will work after you finished 5.1.a)
   // Create the histograms
   Histogram hist0(book0);
   Histogram hist1(book1);
@@ -41,7 +40,6 @@ int main() {
   std::cout << "Book3 has " << hist3.size() << " unique words."
             << "\n\n";
 
-  /* TODO: 5.1.b) Uncomment this after implmenting 'most_common_words()'
   // most common words in each book
   std::cout << "Most common words: book: probability word\n";
   for (const auto &pair : hist0.most_common_words(5)) {
@@ -60,7 +58,6 @@ int main() {
     std::cout << "Book3: " << pair.first << " " << pair.second << "\n";
   }
   std::cout << "\n";
-  */
 
   /* TODO 5.1.c) Uncomment this after implementing 'dissimilarity()'
   // similarity between book0 and book1

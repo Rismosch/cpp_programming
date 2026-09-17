@@ -45,11 +45,14 @@ public:
    */
   double probability(const std::string &word) const;
 
-  // TODO 5.1.b
+  std::vector<std::pair<double, std::string>>
+  most_common_words(unsigned int n_words) const;
+
   // TODO 5.1.c
   // TODO 5.1.d
 
 private:
   // The histogram data is represented as map from word to probability (sorted)
   std::map<const std::string, double> histogram;
+  std::vector<std::pair<double, std::string>> sorted_probabilities;
 };

@@ -30,9 +30,6 @@ void printArray(int arr[], size_t nElements) {
 /// Selection sort algorithm sorts given integer array ascending with n
 /// elements.
 void selectionSort(int arr[], int nElements) {
-  // implementation taken from:
-  // https://en.wikipedia.org/wiki/Selection_sort#Implementations
-
   for (int i = 0; i < nElements; ++i) {
     int j_min = i;
 
