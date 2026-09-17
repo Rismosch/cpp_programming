@@ -1,3 +1,6 @@
+// Simon Sutoris 7542170
+// Eric Berger 7064584
+
 #include "operations.h"
 
 Operation::Operation(const Shape &shape_a, const Shape &shape_b)
