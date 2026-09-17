@@ -1,3 +1,4 @@
+#include "include/shapes_test.h"
 #include "submission/operations.h"
 #include "submission/shapes.h"
 #include "submission/transformations.h"
@@ -10,6 +11,7 @@
 Shape your_shape(); // implemented in your_shape.cpp
 
 int main() {
+  test_shape_implementation();
   // until implemented in task 6.4, this will throw an exception
   try {
     VoxelGrid vg = your_shape();

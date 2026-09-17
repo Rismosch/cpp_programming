@@ -102,7 +102,7 @@ bool Rotated::isInside_impl(const Point3D &p) const {
 AABB Rotated::getBounds_impl() const {
   auto aabb = sub_shape.getBounds();
 
-  // aabbs cant be rotated, because then they wouldn't be axis aligned anymore.
+  // aabbs can't be rotated, because then they wouldn't be axis aligned anymore.
   // instead, rotate all vertices of the original aabb and draw a new aabb
   // around it
   const int vertex_count = 8;

@@ -4,15 +4,30 @@
 #include "voxel_grid.h"
 
 #include "operations.h"
+#include "point3d.h"
 #include "transformations.h"
 
 #include <cassert>
 #include <iostream>
+#include <ostream>
 #include <sstream>
+#include <stdint.h>
 
-VoxelGrid::VoxelGrid(const Shape &shape) {
-  throw std::logic_error("task 6.4 b)");
-  (void)shape; // silence unused parameter warning
+VoxelGrid::VoxelGrid(const Shape &shape) : bounds(shape.getBounds()) {
+  // find resolution
+  Point3D extents{bounds.extents()};
+  Point3D lod{static_cast<double>(level_of_detail)};
+  Point3D resolution = extents * lod;
+  resolution = ::max(resolution, {1.0});
+  res_x = static_cast<uint32_t>(resolution.x);
+  res_y = static_cast<uint32_t>(resolution.y);
+  res_z = static_cast<uint32_t>(resolution.z);
+
+  // initialize voxels
+  voxels.reserve(res_x * res_y * res_z);
+  for (uint32_t i = 0; i < voxels.capacity(); ++i) {
+    voxels.push_back(false);
+  }
 }
 
 std::tuple<uint32_t, uint32_t, uint32_t> VoxelGrid::getResolution() const {
@@ -20,8 +35,49 @@ std::tuple<uint32_t, uint32_t, uint32_t> VoxelGrid::getResolution() const {
 }
 
 VoxelSlice VoxelGrid::extractSlice(Axis axis, uint32_t slice) const {
-  throw std::logic_error("task 6.4 d)");
-  (void)axis, (void)slice; // silence unused parameter warning
+  switch (axis) {
+  case Axis::X: {
+    uint32_t x = slice;
+    VoxelSlice result{res_y, res_z};
+
+    for (uint32_t y = 0; y < res_y; ++y) {
+      for (uint32_t z = 0; z < res_z; ++z) {
+        if (isSet(x, y, z)) {
+          result.data[z][y] = true;
+        }
+      }
+    }
+    break;
+  }
+  case Axis::Y: {
+    uint32_t y = slice;
+    VoxelSlice result{res_x, res_z};
+
+    for (uint32_t x = 0; x < res_x; ++x) {
+      for (uint32_t z = 0; z < res_z; ++z) {
+        if (isSet(x, y, z)) {
+          result.data[z][x] = true;
+        }
+      }
+    }
+    break;
+  }
+  case Axis::Z: {
+    uint32_t z = slice;
+    VoxelSlice result{res_x, res_y};
+    for (uint32_t x = 0; x < res_x; ++x) {
+
+      for (uint32_t y = 0; y < res_y; ++y) {
+        if (isSet(x, y, z)) {
+          result.data[y][x] = true;
+        }
+      }
+    }
+    break;
+  }
+  default:
+    return {0, 0};
+  }
 }
 
 Shape VoxelGrid::clone_impl() const {
@@ -36,7 +92,7 @@ bool VoxelGrid::isInside_impl(const Point3D &p) const {
 }
 
 bool VoxelGrid::isSet(uint32_t x, uint32_t y, uint32_t z) const {
-  // When running in debug mode, these will check whether the supplied indices
+  // When running indebug mode, these will check whether the supplied indices
   // are valid or "trap" to the debugger. When no debugger is running, failing
   // the assertion will terminate the program immediately. When compiled in
   // release mode, assert() does nothing.
@@ -44,12 +100,30 @@ bool VoxelGrid::isSet(uint32_t x, uint32_t y, uint32_t z) const {
   assert(y < res_y);
   assert(z < res_z);
 
-  throw std::logic_error("task 6.4 c)");
+  uint32_t index = x + res_x * y + res_x * res_y * z;
+  if (index < voxels.capacity()) {
+    return voxels[index];
+  } else {
+    return false;
+  }
 }
 
 Point3D VoxelGrid::voxelCenter(uint32_t x, uint32_t y, uint32_t z) const {
-  throw std::logic_error("task 6.4 a)");
-  (void)x, (void)y, (void)z; // silence unused parameter warning
+  AABB aabb = getBounds();
+  Point3D extents = aabb.extents();
+  Point3D resolution{
+      static_cast<double>(res_x),
+      static_cast<double>(res_y),
+      static_cast<double>(res_z),
+  };
+  Point3D stepsize = extents / resolution;
+  Point3D offset{
+      static_cast<double>(x + 0.5),
+      static_cast<double>(y + 0.5),
+      static_cast<double>(z + 0.5),
+  };
+  Point3D center = stepsize * offset + aabb.min;
+  return center;
 }
 
 std::ostream &operator<<(std::ostream &ostream, const VoxelSlice &slice) {
