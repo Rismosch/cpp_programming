@@ -27,18 +27,18 @@ VoxelGrid::VoxelGrid(const Shape &shape) : bounds(shape.getBounds()) {
   // initialize voxels
   voxels.reserve(res_x * res_y * res_z);
   for (uint32_t iz = 0; iz < res_z; ++iz) {
-      for (uint32_t iy = 0; iy < res_y; ++iy) {
-          for (uint32_t ix = 0; ix < res_x; ++ix) {
-              Point3D position = voxelCenter(ix, iy, iz);
-              bool value = shape.isInside(position);
-              voxels.push_back(value);
-          }
+    for (uint32_t iy = 0; iy < res_y; ++iy) {
+      for (uint32_t ix = 0; ix < res_x; ++ix) {
+        Point3D position = voxelCenter(ix, iy, iz);
+        bool value = shape.isInside(position);
+        voxels.push_back(value);
       }
+    }
   }
 
-  //for (uint32_t i = 0; i < voxels.capacity(); ++i) {
-  //  voxels.push_back(false);
-  //}
+  // for (uint32_t i = 0; i < voxels.capacity(); ++i) {
+  //   voxels.push_back(false);
+  // }
 }
 
 std::tuple<uint32_t, uint32_t, uint32_t> VoxelGrid::getResolution() const {
@@ -87,10 +87,9 @@ VoxelSlice VoxelGrid::extractSlice(Axis axis, uint32_t slice) const {
     }
     return result;
   }
-    default:
-        return {0, 0};
+  default:
+    return {0, 0};
   }
-
 }
 
 Shape VoxelGrid::clone_impl() const {
@@ -100,6 +99,7 @@ Shape VoxelGrid::clone_impl() const {
 AABB VoxelGrid::getBounds_impl() const { return bounds; }
 
 bool VoxelGrid::isInside_impl(const Point3D &p) const {
+  // visualization: https://www.desmos.com/calculator/yfxbz0wdhg
   throw std::logic_error("task 6.4 f)");
   (void)p; // silence unused parameter warning
 }
@@ -140,12 +140,12 @@ Point3D VoxelGrid::voxelCenter(uint32_t x, uint32_t y, uint32_t z) const {
 }
 
 std::ostream &operator<<(std::ostream &ostream, const VoxelSlice &slice) {
-  for(auto row: slice.data) {
-      for(bool voxel: row) {
-          ostream << (voxel ? 'X' : '.');
-      }
+  for (auto row : slice.data) {
+    for (bool voxel : row) {
+      ostream << (voxel ? 'X' : '.');
+    }
 
-      ostream << "\n";
+    ostream << "\n";
   }
 
   return ostream;
