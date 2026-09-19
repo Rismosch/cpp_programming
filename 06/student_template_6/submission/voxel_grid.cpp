@@ -119,10 +119,6 @@ bool VoxelGrid::isInside_impl(const Point3D &p) const {
 }
 
 bool VoxelGrid::isSet(uint32_t x, uint32_t y, uint32_t z) const {
-  assert(x < res_x);
-  assert(y < res_y);
-  assert(z < res_z);
-
   uint32_t index = x + res_x * y + res_x * res_y * z;
   if (index < voxels.capacity()) {
     return voxels[index];
