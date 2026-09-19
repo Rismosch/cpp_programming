@@ -119,7 +119,9 @@ AABB Rotated::getBounds_impl() const {
 
   AABB result;
   for (int i = 0; i < vertex_count; ++i) {
-    result.extend(vertices[i]);
+      Point3D vertex = vertices[i];
+      Point3D rotated_vertex = rotate(vertex, axis, angle);
+    result.extend(rotated_vertex);
   }
 
   return result;

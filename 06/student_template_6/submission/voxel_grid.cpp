@@ -8,6 +8,7 @@
 #include "transformations.h"
 
 #include <cassert>
+#include <cstdint>
 #include <iostream>
 #include <ostream>
 #include <sstream>
@@ -25,9 +26,19 @@ VoxelGrid::VoxelGrid(const Shape &shape) : bounds(shape.getBounds()) {
 
   // initialize voxels
   voxels.reserve(res_x * res_y * res_z);
-  for (uint32_t i = 0; i < voxels.capacity(); ++i) {
-    voxels.push_back(false);
+  for (uint32_t iz = 0; iz < res_z; ++iz) {
+      for (uint32_t iy = 0; iy < res_y; ++iy) {
+          for (uint32_t ix = 0; ix < res_x; ++ix) {
+              Point3D position = voxelCenter(ix, iy, iz);
+              bool value = shape.isInside(position);
+              voxels.push_back(value);
+          }
+      }
   }
+
+  //for (uint32_t i = 0; i < voxels.capacity(); ++i) {
+  //  voxels.push_back(false);
+  //}
 }
 
 std::tuple<uint32_t, uint32_t, uint32_t> VoxelGrid::getResolution() const {
@@ -47,7 +58,8 @@ VoxelSlice VoxelGrid::extractSlice(Axis axis, uint32_t slice) const {
         }
       }
     }
-    break;
+
+    return result;
   }
   case Axis::Y: {
     uint32_t y = slice;
@@ -60,7 +72,7 @@ VoxelSlice VoxelGrid::extractSlice(Axis axis, uint32_t slice) const {
         }
       }
     }
-    break;
+    return result;
   }
   case Axis::Z: {
     uint32_t z = slice;
@@ -73,11 +85,12 @@ VoxelSlice VoxelGrid::extractSlice(Axis axis, uint32_t slice) const {
         }
       }
     }
-    break;
+    return result;
   }
-  default:
-    return {0, 0};
+    default:
+        return {0, 0};
   }
+
 }
 
 Shape VoxelGrid::clone_impl() const {
@@ -112,23 +125,28 @@ Point3D VoxelGrid::voxelCenter(uint32_t x, uint32_t y, uint32_t z) const {
   AABB aabb = getBounds();
   Point3D extents = aabb.extents();
   Point3D resolution{
-      static_cast<double>(res_x),
-      static_cast<double>(res_y),
-      static_cast<double>(res_z),
+      static_cast<float>(res_x),
+      static_cast<float>(res_y),
+      static_cast<float>(res_z),
   };
   Point3D stepsize = extents / resolution;
   Point3D offset{
-      static_cast<double>(x + 0.5),
-      static_cast<double>(y + 0.5),
-      static_cast<double>(z + 0.5),
+      static_cast<float>(x + 0.5),
+      static_cast<float>(y + 0.5),
+      static_cast<float>(z + 0.5),
   };
   Point3D center = stepsize * offset + aabb.min;
   return center;
 }
 
 std::ostream &operator<<(std::ostream &ostream, const VoxelSlice &slice) {
-  throw std::logic_error("task 6.4 e)");
-  (void)slice; // silence unused parameter warning
+  for(auto row: slice.data) {
+      for(bool voxel: row) {
+          ostream << (voxel ? 'X' : '.');
+      }
+
+      ostream << "\n";
+  }
 
   return ostream;
 }

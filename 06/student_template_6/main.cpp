@@ -11,7 +11,6 @@
 Shape your_shape(); // implemented in your_shape.cpp
 
 int main() {
-  test_shape_implementation();
   // until implemented in task 6.4, this will throw an exception
   try {
     VoxelGrid vg = your_shape();

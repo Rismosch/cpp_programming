@@ -2,9 +2,11 @@
 // Eric Berger 7064584
 
 #include "operations.h"
+#include "point3d.h"
 #include "shapes.h"
 #include "transformations.h"
 #include "voxel_grid.h"
+#include <iostream>
 
 #include "shapes_test.h"
 
@@ -96,13 +98,23 @@ Shape example_shape() {
 }
 #else
 // fallback example shape (returns a simple cube)
-Shape example_shape() { return Cube{}.clone(); }
+Shape example_shape() {
+    auto cube = Cube{}.clone();
+    auto rotated = cube.rotated(Axis::Z,0.78f);
+    return rotated.clone();
+}
 #endif // end example shapes
 
 /// implementation of your custom shape (bonus task)
 Shape your_shape() {
   // return whatever shape you like in here - this file does not influence the
   // evaluation of your submission (except potential bonus points)
+    auto cube = Cube{};
+    auto rotated = cube
+        .rotated(Axis::Z,0.78f)
+        .rotated(Axis::Y, 0.78f)
+        .rotated(Axis::X, 0.78f);
+    return rotated.clone();
 
-  return example_shape();
+  //return example_shape();
 }
