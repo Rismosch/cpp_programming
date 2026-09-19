@@ -6,7 +6,6 @@
 #include "shapes.h"
 #include "transformations.h"
 #include "voxel_grid.h"
-#include <iostream>
 
 #include "shapes_test.h"
 
