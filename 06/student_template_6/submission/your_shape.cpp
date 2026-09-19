@@ -6,6 +6,7 @@
 #include "shapes.h"
 #include "transformations.h"
 #include "voxel_grid.h"
+#include <iostream>
 
 #include "shapes_test.h"
 
@@ -108,12 +109,24 @@ Shape example_shape() {
 Shape your_shape() {
   // return whatever shape you like in here - this file does not influence the
   // evaluation of your submission (except potential bonus points)
-    auto cube = Cube{};
-    auto rotated = cube
-        .rotated(Axis::Z,0.78f)
-        .rotated(Axis::Y, 0.78f)
-        .rotated(Axis::X, 0.78f);
-    return rotated.clone();
+    std::cout << "1\n";
+    auto test = Cube{}.scaled(2.0f);
+    auto bounds = test.getBounds();
+    Point3D p{1.5f};
+    std::cout << "2\n";
+    std::cout << "bounds: " << bounds << "\n";
+    std::cout << "3\n";
+    std::cout << "contains: " << bounds.contains(p) << "\n";
+    std::cout << "check: " << test.isInside(p) << "\n";
+    std::cout << "4\n";
+
+    return test.clone();
+    //auto cube = Cube{};
+    //auto rotated = cube
+    //    .rotated(Axis::Z,0.78f)
+    //    .rotated(Axis::Y, 0.78f)
+    //    .rotated(Axis::X, 0.78f);
+    //return rotated.clone();
 
   //return example_shape();
 }

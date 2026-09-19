@@ -37,8 +37,9 @@ AABB Shape::getBounds() const {
 
 bool Shape::isInside(const Point3D &p) const {
   // call the nested shape (if any)
-  if (instance)
+  if (instance) {
     return instance->isInside(p);
+  }
 
   // otherwise, call the derived isInside implementation
   return isInside_impl(p);

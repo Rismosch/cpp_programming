@@ -10,7 +10,7 @@ struct Point3D {
   float x, y, z;
 
   /// initialize each member with a different value
-  Point3D(float x, float y, float z) : x{x}, y{y}, z{z} {}
+  Point3D(float x_, float y_, float z_) : x{x_}, y{y_}, z{z_} {}
   /// initialize all members with the same value
   Point3D(float xyz = 0.0f) : Point3D{xyz, xyz, xyz} {}
 

@@ -43,15 +43,15 @@ Transformation::Transformation(const Shape &shape) : sub_shape{shape.clone()} {}
 //------------------------------------------------------------------------------
 // Scaled
 //------------------------------------------------------------------------------
-Scaled::Scaled(const Shape &shape, const Point3D &factor)
-    : Transformation(shape), factor(factor) {}
+Scaled::Scaled(const Shape &shape, const Point3D &factor_)
+    : Transformation(shape), factor(factor_) {}
 
 Shape Scaled::clone_impl() const {
   return {std::make_shared<Scaled>(sub_shape.clone(), factor)};
 }
 
 bool Scaled::isInside_impl(const Point3D &p) const {
-  auto scaled_p = p * -factor;
+  auto scaled_p = p / factor;
   return sub_shape.isInside(scaled_p);
 }
 
@@ -65,8 +65,8 @@ AABB Scaled::getBounds_impl() const {
 //------------------------------------------------------------------------------
 // Translated
 //------------------------------------------------------------------------------
-Translated::Translated(const Shape &shape, const Point3D &offset)
-    : Transformation(shape), offset(offset) {}
+Translated::Translated(const Shape &shape, const Point3D &offset_)
+    : Transformation(shape), offset(offset_) {}
 
 Shape Translated::clone_impl() const {
   return {std::make_shared<Translated>(sub_shape.clone(), offset)};
@@ -87,8 +87,8 @@ AABB Translated::getBounds_impl() const {
 //------------------------------------------------------------------------------
 // Rotated
 //------------------------------------------------------------------------------
-Rotated::Rotated(const Shape &shape, Axis axis, float angle)
-    : Transformation(shape), axis(axis), angle(angle) {}
+Rotated::Rotated(const Shape &shape, Axis axis_, float angle_)
+    : Transformation(shape), axis(axis_), angle(angle_) {}
 
 Shape Rotated::clone_impl() const {
   return {std::make_shared<Rotated>(sub_shape.clone(), axis, angle)};

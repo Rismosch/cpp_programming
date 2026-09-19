@@ -107,11 +107,12 @@ bool VoxelGrid::isInside_impl(const Point3D &p) const {
     Point3D b1 = aabb.min;
     Point3D b2 = aabb.max;
 
-    int ix = static_cast<int>(res_x * (p.x - b1.x) / (b2.x - b1.x));
-    int iy = static_cast<int>(res_y * (p.y - b1.y) / (b2.y - b1.y));
-    int iz = static_cast<int>(res_z * (p.z - b1.z) / (b2.z - b1.z));
+    float ix = static_cast<float>(res_x) * (p.x - b1.x) / (b2.x - b1.x);
+    float iy = static_cast<float>(res_y) * (p.y - b1.y) / (b2.y - b1.y);
+    float iz = static_cast<float>(res_z) * (p.z - b1.z) / (b2.z - b1.z);
 
-    if (ix < 0 || iy < 0 || iz < 0) {
+    if (std::isnan(ix) || std::isnan(iy) || std::isnan(iz) ||
+        ix < 0 || iy < 0 || iz < 0) {
         return false;
     } else {
         return isSet(
@@ -156,7 +157,7 @@ Point3D VoxelGrid::voxelCenter(uint32_t x, uint32_t y, uint32_t z) const {
 std::ostream &operator<<(std::ostream &ostream, const VoxelSlice &slice) {
   for (auto row : slice.data) {
     for (bool voxel : row) {
-      ostream << (voxel ? 'X' : '.');
+      ostream << (voxel ? 'X' : '.') << ' ';
     }
 
     ostream << "\n";
