@@ -107,26 +107,11 @@ Shape example_shape() {
 
 /// implementation of your custom shape (bonus task)
 Shape your_shape() {
-  // return whatever shape you like in here - this file does not influence the
-  // evaluation of your submission (except potential bonus points)
-    std::cout << "1\n";
-    auto test = Cube{}.scaled(2.0f);
-    auto bounds = test.getBounds();
-    Point3D p{1.5f};
-    std::cout << "2\n";
-    std::cout << "bounds: " << bounds << "\n";
-    std::cout << "3\n";
-    std::cout << "contains: " << bounds.contains(p) << "\n";
-    std::cout << "check: " << test.isInside(p) << "\n";
-    std::cout << "4\n";
-
-    return test.clone();
-    //auto cube = Cube{};
-    //auto rotated = cube
-    //    .rotated(Axis::Z,0.78f)
-    //    .rotated(Axis::Y, 0.78f)
-    //    .rotated(Axis::X, 0.78f);
-    //return rotated.clone();
-
-  //return example_shape();
+    float angle = 0.25f*3.14159265358979323846f;
+    return Cube{}
+        .scaled(0.5f)
+        .rotated(Axis::X, angle)
+        .rotated(Axis::Y, angle)
+        .rotated(Axis::Z, angle)
+        .clone();
 }

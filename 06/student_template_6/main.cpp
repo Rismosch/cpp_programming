@@ -14,8 +14,7 @@ int main() {
   // until implemented in task 6.4, this will throw an exception
   try {
     VoxelGrid vg = your_shape();
-    //std::cout << vg;
-    std::cout << "hello\n";
+    std::cout << vg;
   } catch (std::logic_error &e) {
     std::cout << "you need to implement " << e.what()
               << " to get some output here!" << std::endl;

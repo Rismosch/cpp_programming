@@ -18,15 +18,15 @@ std::pair<float, float> rotate2D(float x, float y, float angle) {
 Point3D rotate(const Point3D &p, Axis axis, float angle) {
   switch (axis) {
   case Axis::X: {
-    auto [y, z] = rotate2D(p.y, p.z, -angle);
+    auto [y, z] = rotate2D(p.y, p.z, angle);
     return {p.x, y, z};
   }
   case Axis::Y: {
-    auto [x, z] = rotate2D(p.x, p.z, -angle);
+    auto [x, z] = rotate2D(p.x, p.z, angle);
     return {x, p.y, z};
   }
   case Axis::Z: {
-    auto [x, y] = rotate2D(p.x, p.y, -angle);
+    auto [x, y] = rotate2D(p.x, p.y, angle);
     return {x, y, p.z};
   }
   default:
