@@ -8,7 +8,6 @@
 #include "transformations.h"
 
 #include <cassert>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <ostream>
@@ -36,10 +35,6 @@ VoxelGrid::VoxelGrid(const Shape &shape) : bounds(shape.getBounds()) {
       }
     }
   }
-
-  // for (uint32_t i = 0; i < voxels.capacity(); ++i) {
-  //   voxels.push_back(false);
-  // }
 }
 
 std::tuple<uint32_t, uint32_t, uint32_t> VoxelGrid::getResolution() const {
@@ -100,7 +95,7 @@ Shape VoxelGrid::clone_impl() const {
 AABB VoxelGrid::getBounds_impl() const { return bounds; }
 
 bool VoxelGrid::isInside_impl(const Point3D &p) const {
-    // first, find the x,y,z indices
+    // find the x,y,z indices
     // visualization: https://www.desmos.com/calculator/yfxbz0wdhg
 
     AABB aabb = getBounds();
@@ -124,10 +119,10 @@ bool VoxelGrid::isInside_impl(const Point3D &p) const {
 }
 
 bool VoxelGrid::isSet(uint32_t x, uint32_t y, uint32_t z) const {
-  // When running indebug mode, these will check whether the supplied indices
-  // are valid or "trap" to the debugger. When no debugger is running, failing
-  // the assertion will terminate the program immediately. When compiled in
-  // release mode, assert() does nothing.
+  assert(x < res_x);
+  assert(y < res_y);
+  assert(z < res_z);
+
   uint32_t index = x + res_x * y + res_x * res_y * z;
   if (index < voxels.capacity()) {
     return voxels[index];

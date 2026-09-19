@@ -25,7 +25,7 @@ Shape And::clone_impl() const {
 }
 
 bool And::isInside_impl(const Point3D &p) const {
-  return sub_shape_a.isInside(p) & sub_shape_b.isInside(p);
+  return sub_shape_a.isInside(p) && sub_shape_b.isInside(p);
 }
 
 //------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ Shape Or::clone_impl() const {
 }
 
 bool Or::isInside_impl(const Point3D &p) const {
-  return sub_shape_a.isInside(p) | sub_shape_b.isInside(p);
+  return sub_shape_a.isInside(p) || sub_shape_b.isInside(p);
 }
 
 //------------------------------------------------------------------------------
