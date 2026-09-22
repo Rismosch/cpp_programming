@@ -3,38 +3,47 @@
 #include <iostream>
 
 // TODO: task 7.2 a)
+template<typename T>
 class ComplexNumber
 {
 public:
     ComplexNumber() noexcept = default;
-    ComplexNumber(double real, double imaginary = 0.0) : real_number(real), imaginary_number(imaginary) {};
+    ComplexNumber(T real, T imaginary) : real_number(real), imaginary_number(imaginary) {};
 
     ComplexNumber& operator+=(const ComplexNumber& rhs);
 
-    friend std::ostream& operator<<(std::ostream&, const ComplexNumber&);
-
-    double getIm() const { return imaginary_number; };
-    double getRe() const { return real_number; }
+    T getIm() const { return imaginary_number; };
+    T getRe() const { return real_number; }
 
 private:
-    double real_number{};
-    double imaginary_number{};
+    T real_number{};
+    T imaginary_number{};
 };
 
 // TODO: task 7.2 b) - unary operator+= (class member, modifying)
-ComplexNumber& ComplexNumber::operator+=(const ComplexNumber& other)
+template<typename T>
+ComplexNumber<T>& ComplexNumber<T>::operator+=(const ComplexNumber& other)
 {
-    // TODO
+    real_number += other.getRe();
+    imaginary_number += other.getIm();
+    return *this;
 }
 
 // TODO: task 7.2 b) - binary operator+ (free function, non-modifying: returns new complex number)
-ComplexNumber operator +(const ComplexNumber& lhs, const ComplexNumber& rhs)
+template<typename T>
+ComplexNumber<T> operator +(const ComplexNumber<T>& lhs, const ComplexNumber<T>& rhs)
 {
-    // TODO
-    return {};
+    return ComplexNumber<T>(lhs.getRe() + rhs.getRe(), lhs.getIm() + rhs.getIm());
 }
 
-std::ostream& operator<<(std::ostream& out, const ComplexNumber& complex)
+template<typename T>
+std::ostream& operator<<(std::ostream& out, const ComplexNumber<T>& complex)
 {
-    // TODO
+    if (complex.getIm() < 0) {
+    out << complex.getRe() << "-" << -complex.getIm() << "i";
+    }
+    else {
+    out << complex.getRe() << "+" << complex.getIm() << "i";
+    }
+    return out;
 }
