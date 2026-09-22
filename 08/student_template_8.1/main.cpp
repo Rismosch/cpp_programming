@@ -39,14 +39,13 @@ int main() {
   std::cout << "MAE: " << MAE(gt, pred) << "\n";
 
   // c) zip
-  /* TODO 8.1.c: uncomment this after implementing the zip function
   std::vector<std::string> names = {"zero", "one", "two", "three", "four", "five"};
   auto zipped = zip<float, std::string>(gt, names);
   for (std::cout << "zipped: "; const auto &pair : zipped) {
     std::cout << pair.first << "->" << pair.second << ", ";
   }
   std::cout << "\n";
-  */
+ 
 
   // d) range
   for (std::cout << "range(-10, 10): "; int value : range(-10, 10)) {

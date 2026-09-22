@@ -1,3 +1,6 @@
+// Simon Sutoris 7542170
+// Eric Berger 7064584
+
 #pragma once
 #include <algorithm>
 #include <vector>
@@ -25,7 +28,17 @@ float MAE(const std::vector<float>& ground_truth,
           const std::vector<float>& prediction);
 
 
-// TODO 8.1.c: implement zip here!
+template<typename T, typename U>
+std::vector<std::pair<T, U>> zip(const std::vector<T>& vec1, const std::vector<U>& vec2) {
+    std::vector<std::pair<T, U>> result(vec1.size());
+    std::transform(vec1.begin(), vec1.end(),
+        vec2.begin(),
+        result.begin(),
+        [] (const T& x, const U& y) {return std::pair<T, U>(x, y);}
+    );
+    return result;
+}
+
 
 /**
  * @brief Generates a vector with integer values in the range [start, end[
