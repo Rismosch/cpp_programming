@@ -39,7 +39,7 @@ vector<double> sequential_sort(vector<double> &data) {
 
 vector<double> parallel_sort(vector<double> &data) {
   std::sort(
-      std::execution::par,
+      std::execution::par_unseq,
       data.begin(),
       data.end()
   );
@@ -62,7 +62,7 @@ vector<double> sequential_transform(vector<double> &data,
 vector<double> parallel_transform(vector<double> &data,
                                     double (*function)(double)) {
   std::transform(
-      std::execution::par,
+      std::execution::par_unseq,
       data.begin(), data.end(),
       data.begin(),
       function
