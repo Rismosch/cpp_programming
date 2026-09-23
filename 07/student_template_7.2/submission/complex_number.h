@@ -6,44 +6,44 @@
 #include <iostream>
 
 template<typename T>
-class ComplexNumber
-{
+class ComplexNumber {
 public:
-    ComplexNumber() noexcept = default;
-    ComplexNumber(T real, T imaginary) : real_number(real), imaginary_number(imaginary) {};
+  ComplexNumber() noexcept = default;
+  ComplexNumber(T real, T imaginary)
+      : real_number(real), imaginary_number(imaginary){};
 
-    ComplexNumber& operator+=(const ComplexNumber& rhs);
+  ComplexNumber &operator+=(const ComplexNumber &rhs);
 
-    T getIm() const { return imaginary_number; };
-    T getRe() const { return real_number; }
+  friend std::ostream &operator<< <T>(std::ostream &, const ComplexNumber<T> &);
+
+  T getIm() const { return imaginary_number; };
+  T getRe() const { return real_number; }
 
 private:
-    T real_number{};
-    T imaginary_number{};
+  T real_number{};
+  T imaginary_number{};
 };
 
 template<typename T>
-ComplexNumber<T>& ComplexNumber<T>::operator+=(const ComplexNumber& other)
-{
-    real_number += other.getRe();
-    imaginary_number += other.getIm();
-    return *this;
+ComplexNumber<T> &ComplexNumber<T>::operator+=(const ComplexNumber<T> &other) {
+    return this + other;
 }
 
 template<typename T>
-ComplexNumber<T> operator +(const ComplexNumber<T>& lhs, const ComplexNumber<T>& rhs)
-{
-    return ComplexNumber<T>(lhs.getRe() + rhs.getRe(), lhs.getIm() + rhs.getIm());
+ComplexNumber<T> operator+(const ComplexNumber<T> &lhs, const ComplexNumber<T> &rhs) {
+    return ComplexNumber<T>(
+        lhs.getRe() + rhs.getIm(),
+        lhs.getRe() + rhs.getIm()
+    );
 }
 
 template<typename T>
-std::ostream& operator<<(std::ostream& out, const ComplexNumber<T>& complex)
-{
-    if (complex.getIm() < 0) {
-    out << complex.getRe() << "-" << -complex.getIm() << "i";
-    }
-    else {
-    out << complex.getRe() << "+" << complex.getIm() << "i";
-    }
+std::ostream &operator<<(std::ostream &out, const ComplexNumber<T> &complex) {
+  if (complex.imaginary_number < 0) {
+    out << complex.real_number << complex.imaginary_number << "i";
+  } else {
+    out << complex.real_number << "+" << complex.imaginary_number << "i";
+  }
+
     return out;
 }
