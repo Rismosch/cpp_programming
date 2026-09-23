@@ -14,7 +14,8 @@ public:
 
   ComplexNumber &operator+=(const ComplexNumber &rhs);
 
-  friend std::ostream &operator<< <T>(std::ostream &, const ComplexNumber<T> &);
+  // it compiles on our machines, but infomark makes a ruckus, so we opted out of the friend method
+  //friend std::ostream &operator<< <T>(std::ostream &, const ComplexNumber<T> &);
 
   T getIm() const { return imaginary_number; };
   T getRe() const { return real_number; }
