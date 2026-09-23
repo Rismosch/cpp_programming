@@ -5,7 +5,6 @@
 
 #include <iostream>
 
-// TODO: task 7.2 a)
 template<typename T>
 class ComplexNumber
 {
@@ -23,7 +22,6 @@ private:
     T imaginary_number{};
 };
 
-// TODO: task 7.2 b) - unary operator+= (class member, modifying)
 template<typename T>
 ComplexNumber<T>& ComplexNumber<T>::operator+=(const ComplexNumber& other)
 {
@@ -32,7 +30,6 @@ ComplexNumber<T>& ComplexNumber<T>::operator+=(const ComplexNumber& other)
     return *this;
 }
 
-// TODO: task 7.2 b) - binary operator+ (free function, non-modifying: returns new complex number)
 template<typename T>
 ComplexNumber<T> operator +(const ComplexNumber<T>& lhs, const ComplexNumber<T>& rhs)
 {
