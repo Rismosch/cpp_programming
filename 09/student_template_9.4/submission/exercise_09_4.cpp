@@ -91,10 +91,12 @@ std::vector<int> hist_critical(int N, int bins) {
   std::vector<int> hist(static_cast<size_t>(bins), 0);
 
   Timer t("Histogram calculation using a critical section.");
-#pragma omp parallel for
+  #pragma omp parallel for
   for (int i = 0; i < N; ++i) {
     int bin = sample_from_normal_distribution();
-    ++hist[static_cast<size_t>(bin)];
+
+    #pragma omp critical(add_critical)
+    { ++hist[static_cast<size_t>(bin)]; }
   }
   t.stop();
   return hist;
@@ -106,14 +108,26 @@ std::vector<int> hist_critical(int N, int bins) {
 // afterwards
 std::vector<int> hist_element_lock(int N, int bins) {
   std::vector<int> hist(static_cast<size_t>(bins), 0);
+  std::vector<omp_lock_t> locks(static_cast<size_t>(bins));
+  for (omp_lock_t &lock: locks) {
+    omp_init_lock(&lock);
+  }
 
   Timer t("Histogram with bin-wise locks");
-#pragma omp parallel for
+  #pragma omp parallel for
   for (int i = 0; i < N; ++i) {
     int bin = sample_from_normal_distribution();
-    ++hist[static_cast<size_t>(bin)];
+    size_t index = static_cast<size_t>(bin);
+
+    omp_set_lock(&locks[index]);
+    ++hist[index];
+    omp_unset_lock(&locks[index]);
   }
   t.stop();
+
+  for (omp_lock_t &lock: locks) {
+    omp_destroy_lock(&lock);
+  }
 
   return hist;
 }
@@ -122,24 +136,45 @@ std::vector<int> hist_element_lock(int N, int bins) {
 // merging hists without any locking at all.
 std::vector<int> hist_lockfree(int N, int bins) {
   std::vector<int> hist(static_cast<size_t>(bins), 0);
-
-  int thread_count;
   std::vector<int> hist_large;
+
   Timer t("Histogram lock-free implementation.");
-#pragma omp parallel
+  #pragma omp parallel
   {
-#pragma omp single
+    int thread_count = omp_get_num_threads();
+
+    #pragma omp single
     {
-      thread_count = omp_get_num_threads();
       hist_large.resize(static_cast<size_t>(thread_count * bins)); // one section for each thread
     }
-    int offset = omp_get_thread_num() * bins;
-#pragma omp for
+    int thread_num = omp_get_thread_num();
+    int offset = thread_num * bins;
+
+    #pragma omp for
     for (int i = 0; i < N; ++i) {
       ++hist_large[static_cast<size_t>(offset + sample_from_normal_distribution())];
     }
+
+    #pragma omp for
+    for (size_t i = 0; i < static_cast<size_t>(bins); ++i) {
+      int sum = 0;
+      for (size_t ithread = 0; ithread < static_cast<size_t>(thread_count); ++ithread) {
+        size_t index = i + ithread * static_cast<size_t>(bins);
+        sum += hist_large[index];
+      }
+
+      hist[i] = sum;
+    }
+
     // find a lock-free way to merge bins (hint: iterate over bins in the outer
     // loop and aggregate in the inner loop
+    int sum = 0;
+    size_t step = static_cast<size_t>(bins);
+    for (size_t i = 0; i < hist_large.size(); i += step) {
+      sum += hist_large[i];
+    }
+
+    hist[static_cast<size_t>(thread_num)] = sum;
   }
   t.stop();
   return hist;
