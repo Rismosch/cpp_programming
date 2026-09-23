@@ -39,10 +39,10 @@ ComplexNumber<T> operator+(const ComplexNumber<T> &lhs, const ComplexNumber<T> &
 
 template<typename T>
 std::ostream &operator<<(std::ostream &out, const ComplexNumber<T> &complex) {
-  if (complex.imaginary_number < 0) {
-    out << complex.real_number << complex.imaginary_number << "i";
+  if (complex.getIm() < 0) {
+    out << complex.getRe() << complex.getIm() << "i";
   } else {
-    out << complex.real_number << "+" << complex.imaginary_number << "i";
+    out << complex.getRe() << "+" << complex.getIm() << "i";
   }
 
     return out;
