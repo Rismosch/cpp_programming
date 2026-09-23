@@ -1,3 +1,6 @@
+// Simon Sutoris 7542170
+// Eric Berger 7064584
+
 #include "exercise_09_4.h"
 
 #include <chrono>

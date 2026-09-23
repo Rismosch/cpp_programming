@@ -1,3 +1,6 @@
+// Simon Sutoris 7542170
+// Eric Berger 7064584
+
 #include "exercise_09_1.h"
 
 #include <cstdint>
@@ -62,7 +65,7 @@ void sell_stuff(Shop &shop) {
   while (true) {
     // randomly select what to sell
     try {
-      // const std::lock_guard<std::mutex> lock(item_mutex);
+      //const std::lock_guard<std::mutex> lock(item_mutex);
       if (choose_what_to_sell() == Item::TOY) {
         sell_toy(shop);
       } else {
