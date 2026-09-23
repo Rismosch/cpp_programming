@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <map>
 #include <cstdlib>
+#include <map>
 
 void slow_producer();
 void fast_producer();
