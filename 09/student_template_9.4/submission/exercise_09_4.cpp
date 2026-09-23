@@ -157,24 +157,11 @@ std::vector<int> hist_lockfree(int N, int bins) {
 
     #pragma omp for
     for (size_t i = 0; i < static_cast<size_t>(bins); ++i) {
-      int sum = 0;
       for (size_t ithread = 0; ithread < static_cast<size_t>(thread_count); ++ithread) {
         size_t index = i + ithread * static_cast<size_t>(bins);
-        sum += hist_large[index];
+        hist[i] += hist_large[index];
       }
-
-      hist[i] = sum;
     }
-
-    // find a lock-free way to merge bins (hint: iterate over bins in the outer
-    // loop and aggregate in the inner loop
-    int sum = 0;
-    size_t step = static_cast<size_t>(bins);
-    for (size_t i = 0; i < hist_large.size(); i += step) {
-      sum += hist_large[i];
-    }
-
-    hist[static_cast<size_t>(thread_num)] = sum;
   }
   t.stop();
   return hist;
