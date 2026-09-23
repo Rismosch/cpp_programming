@@ -36,7 +36,7 @@ void slow_producer() {
 		slow_queue.push(slow_generator() % 100 + 1);
 	} // end of scope releases lock
     execution_count++;
-    // TODO: tell others that a new value is available in the queue
+    slow_cond.notify_one();
     std::this_thread::sleep_for(std::chrono::milliseconds(delay_generator() % 200));
   }
 }
@@ -49,7 +49,7 @@ void fast_producer() {
 		fast_queue.push(fast_generator() % 100 + 1);
 	} // end of scope releases lock
     execution_count++;
-    // TODO: tell others that a new value is available in the queue
+    fast_cond.notify_one();
     std::this_thread::sleep_for(std::chrono::milliseconds(delay_generator() % 20));
   }
 }
@@ -57,16 +57,23 @@ void fast_producer() {
 // consumer thread function processes input once it get's available
 void consumer(std::map<unsigned long, size_t> *diff_count) {
   while (execution_count < 20) {
-	// TODO student: Define a unique_lock and use one of the condition variables to wait until condition (non-empty queue) is fullfiled.
-	// Note: the simpler scoped_lock doesn't work here as the condition variable needs to lock/unlock the mutex while waiting.
-	long unsigned int slow_data = slow_queue.front();
-	slow_queue.pop();
-	// TODO student: don't forget to unlock
 
-	// TODO: similar for the fast queue
-	long unsigned int fast_data = fast_queue.front();
-	fast_queue.pop();
-	// TODO student: don't forget to unlock
+  long unsigned int slow_data;
+  long unsigned int fast_data;
+
+  {
+    std::unique_lock<std::mutex> lock(slow_mutex);
+    slow_cond.wait(lock, [](){return !slow_queue.empty();});
+    slow_data = slow_queue.front();
+    slow_queue.pop();
+  }
+
+  {
+    std::unique_lock<std::mutex> lock(fast_mutex);
+    fast_cond.wait(lock, [](){return !fast_queue.empty();});
+	  fast_data = fast_queue.front();
+	  fast_queue.pop();
+  }
 
     // count how often differences between a and b occur
     (*diff_count)[slow_data - fast_data]++;
