@@ -20,7 +20,7 @@ struct Shop {
 
 /**
  * @brief This is what a salesperson does. She sells stuff from a shop.
- * 
+ *
  * @param shop The shop representation that is used to keep track of the items.
  */
 void sell_stuff(Shop &shop);
@@ -29,7 +29,7 @@ void sell_stuff(Shop &shop);
  * @brief Sell one book from a shop
  * @throws std::runtime_error If no book is left to sell in the shop a runtime
  * exception is thrown.
- * 
+ *
  * @param shop The shop representation that is updated when the book is sold.
  */
 void sell_book(Shop &shop);
@@ -38,7 +38,7 @@ void sell_book(Shop &shop);
  * @brief Sell one toy from a shop
  * @throws std::runtime_error If no toy is left to sell in the shop a runtime
  * exception is thrown.
- * 
+ *
  * @param shop The shop representation that is updated when the toy is sold.
  */
 void sell_toy(Shop &shop);

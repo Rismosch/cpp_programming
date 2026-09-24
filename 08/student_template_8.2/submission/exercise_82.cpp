@@ -8,21 +8,21 @@
 
 std::vector<Point> sort_x(const std::vector<Point> &points) {
   std::vector<Point> sorted = points;
-  std::sort(sorted.begin(), sorted.end(),
-          [](const Point& a, const Point& b) {
-            if (a.x != b.x) return a.x < b.x;
-            return a.y < b.y;
-          });
+  std::sort(sorted.begin(), sorted.end(), [](const Point &a, const Point &b) {
+    if (a.x != b.x)
+      return a.x < b.x;
+    return a.y < b.y;
+  });
   return sorted;
 }
 
 std::vector<Point> sort_y(const std::vector<Point> &points) {
   std::vector<Point> sorted = points;
-  std::sort(sorted.begin(), sorted.end(),
-          [](const Point& a, const Point& b) {
-            if (a.y != b.y) return a.y < b.y;
-            return a.x < b.x;
-          });
+  std::sort(sorted.begin(), sorted.end(), [](const Point &a, const Point &b) {
+    if (a.y != b.y)
+      return a.y < b.y;
+    return a.x < b.x;
+  });
   return sorted;
 }
 

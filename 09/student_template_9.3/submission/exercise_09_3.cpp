@@ -28,44 +28,28 @@ vector<double> get_vector_of_random_numbers() {
 }
 
 vector<double> sequential_sort(vector<double> &data) {
-  std::sort(
-      std::execution::seq,
-      data.begin(),
-      data.end()
-  );
+  std::sort(std::execution::seq, data.begin(), data.end());
 
   return data;
 }
 
 vector<double> parallel_sort(vector<double> &data) {
-  std::sort(
-      std::execution::par,
-      data.begin(),
-      data.end()
-  );
+  std::sort(std::execution::par, data.begin(), data.end());
 
   return data;
 }
 
 vector<double> sequential_transform(vector<double> &data,
                                     double (*function)(double)) {
-  std::transform(
-      std::execution::seq,
-      data.begin(), data.end(),
-      data.begin(),
-      function
-    );
+  std::transform(std::execution::seq, data.begin(), data.end(), data.begin(),
+                 function);
 
   return data;
 }
 
 vector<double> parallel_transform(vector<double> &data,
-                                    double (*function)(double)) {
-  std::transform(
-      std::execution::par,
-      data.begin(), data.end(),
-      data.begin(),
-      function
-    );
-    return data;
+                                  double (*function)(double)) {
+  std::transform(std::execution::par, data.begin(), data.end(), data.begin(),
+                 function);
+  return data;
 }

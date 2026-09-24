@@ -37,7 +37,8 @@ void slow_producer() {
       // lock slow mutex. unlock via RAII
       std::scoped_lock<std::mutex> ul(slow_mutex);
 
-      // generate a random number an push it to the queue. this is safe because we hold the lock to the slow_mutex
+      // generate a random number an push it to the queue. this is safe because
+      // we hold the lock to the slow_mutex
       slow_queue.push(slow_generator() % 100 + 1);
     } // end of scope releases lock
 
@@ -91,7 +92,8 @@ void consumer(std::map<unsigned long, size_t> *diff_count) {
       // wait for the slow producer while the queue is empty
       slow_cond.wait(lock, []() { return !slow_queue.empty(); });
 
-      // pop data from the slow queue. this is safe because we hold the lock to the slow mutex
+      // pop data from the slow queue. this is safe because we hold the lock to
+      // the slow mutex
       slow_data = slow_queue.front();
       slow_queue.pop();
     }
@@ -103,13 +105,15 @@ void consumer(std::map<unsigned long, size_t> *diff_count) {
       // wait for the fast producer while the queue is empty
       fast_cond.wait(lock, []() { return !fast_queue.empty(); });
 
-      // pop data from the fast queue. this is safe because we hold the lock to the fast mutex
+      // pop data from the fast queue. this is safe because we hold the lock to
+      // the fast mutex
       fast_data = fast_queue.front();
       fast_queue.pop();
     }
 
     // count how often differences between a and b occur
-    (*diff_count)[slow_data - fast_data]++; // compute difference and increase its counter
-    execution_count++; // increase thread local execution count
+    (*diff_count)[slow_data -
+                  fast_data]++; // compute difference and increase its counter
+    execution_count++;          // increase thread local execution count
   }
 }

@@ -95,27 +95,24 @@ Shape VoxelGrid::clone_impl() const {
 AABB VoxelGrid::getBounds_impl() const { return bounds; }
 
 bool VoxelGrid::isInside_impl(const Point3D &p) const {
-    // find the x,y,z indices
-    // visualization: https://www.desmos.com/calculator/yfxbz0wdhg
+  // find the x,y,z indices
+  // visualization: https://www.desmos.com/calculator/yfxbz0wdhg
 
-    AABB aabb = getBounds();
-    Point3D b1 = aabb.min;
-    Point3D b2 = aabb.max;
+  AABB aabb = getBounds();
+  Point3D b1 = aabb.min;
+  Point3D b2 = aabb.max;
 
-    float ix = static_cast<float>(res_x) * (p.x - b1.x) / (b2.x - b1.x);
-    float iy = static_cast<float>(res_y) * (p.y - b1.y) / (b2.y - b1.y);
-    float iz = static_cast<float>(res_z) * (p.z - b1.z) / (b2.z - b1.z);
+  float ix = static_cast<float>(res_x) * (p.x - b1.x) / (b2.x - b1.x);
+  float iy = static_cast<float>(res_y) * (p.y - b1.y) / (b2.y - b1.y);
+  float iz = static_cast<float>(res_z) * (p.z - b1.z) / (b2.z - b1.z);
 
-    if (std::isnan(ix) || std::isnan(iy) || std::isnan(iz) ||
-        ix < 0 || iy < 0 || iz < 0) {
-        return false;
-    } else {
-        return isSet(
-            static_cast<uint32_t>(ix),
-            static_cast<uint32_t>(iy),
-            static_cast<uint32_t>(iz)
-        );
-    }
+  if (std::isnan(ix) || std::isnan(iy) || std::isnan(iz) || ix < 0 || iy < 0 ||
+      iz < 0) {
+    return false;
+  } else {
+    return isSet(static_cast<uint32_t>(ix), static_cast<uint32_t>(iy),
+                 static_cast<uint32_t>(iz));
+  }
 }
 
 bool VoxelGrid::isSet(uint32_t x, uint32_t y, uint32_t z) const {

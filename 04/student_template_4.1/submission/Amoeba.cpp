@@ -11,7 +11,7 @@ Amoeba::Amoeba(double health_, double power_, double defence_,
   name = "Amoeba";
 };
 
-Amoeba::~Amoeba(){};
+Amoeba::~Amoeba() {};
 Food *Amoeba::clone() const { return new Amoeba(*this); }
 void Amoeba::eat(double health, double dna) {
   this->health += health;

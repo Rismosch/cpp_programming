@@ -6,15 +6,14 @@
 
 /**
  * @brief Simple representation of a 2d-point
- * 
+ *
  */
 struct Point {
-    float x, y;
+  float x, y;
 
-    Point(float x_, float y_) : x(x_), y(y_) {}
-
+  Point(float x_, float y_) : x(x_), y(y_) {}
 };
 
 inline std::ostream &operator<<(std::ostream &os, Point const &m) {
-    return os << "(" << m.x << ", " << m.y << ")";
+  return os << "(" << m.x << ", " << m.y << ")";
 }

@@ -11,7 +11,6 @@
 #include <stdexcept>
 #include <thread>
 
-
 // This are the item types
 enum class Item { BOOK = 0, TOY = 1 };
 
@@ -29,10 +28,10 @@ enum class Item { BOOK = 0, TOY = 1 };
 Item choose_what_to_sell() {
   static thread_local std::default_random_engine generator; // only local to
                                                             // this thread
-  std::discrete_distribution<int> distribution({5, 1}); // local variable
-  int choice = distribution(generator); // local variable
-  return static_cast<Item>(choice);     // cast and return copy of the local
-                                        // variable
+  std::discrete_distribution<int> distribution({5, 1});     // local variable
+  int choice = distribution(generator);                     // local variable
+  return static_cast<Item>(choice); // cast and return copy of the local
+                                    // variable
 }
 
 // please use these three mutexes to protect access to shared variables
@@ -96,10 +95,10 @@ void sell_stuff(Shop &shop) {
     try {
       // lock is not required, because all following operations are threadsafe
       // already
-      //const std::lock_guard<std::mutex> lock(item_mutex);
+      // const std::lock_guard<std::mutex> lock(item_mutex);
       if (choose_what_to_sell() == Item::TOY) { // threadsafe, generate random
                                                 // choice
-        sell_toy(shop); // threadsafe
+        sell_toy(shop);                         // threadsafe
       } else {
         sell_book(shop); // threadsafe
       }

@@ -84,8 +84,7 @@ int main() {
   ////// Map
   // square
   auto map_sq_result_int = map<int>(square<int>, input_data_int);
-  auto map_sq_result_float =
-      map<float>(square<float>, input_data_float);
+  auto map_sq_result_float = map<float>(square<float>, input_data_float);
   std::cout << "Int map(square) result:\n";
   for (auto value : map_sq_result_int) {
     std::cout << value << ", ";
@@ -99,8 +98,7 @@ int main() {
 
   // halve
   auto map_halve_result_int = map<int>(halve<int>, input_data_int);
-  auto map_halve_result_float =
-      map<float>(halve<float>, input_data_float);
+  auto map_halve_result_float = map<float>(halve<float>, input_data_float);
   std::cout << "Int map(halve) result:\n";
   for (auto value : map_halve_result_int) {
     std::cout << value << ", ";
@@ -111,7 +109,6 @@ int main() {
     std::cout << value << ", ";
   }
   std::cout << "\n";
-
 
   return EXIT_SUCCESS;
 }
