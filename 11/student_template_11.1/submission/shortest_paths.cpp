@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstddef>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <utility>
 
@@ -19,6 +20,8 @@ size_t ShortestPaths::getNodeIdByName(const std::string &name) const {
 
 std::vector<size_t> ShortestPaths::compute_shortest_path(size_t from,
                                                      size_t to) const {
+    size_t num_visited = 0;
+
   // unkown distance function from source to v
   std::vector<float> dist(
           adjacency_matrix.size(),
@@ -35,11 +38,29 @@ std::vector<size_t> ShortestPaths::compute_shortest_path(size_t from,
   // distance from source to source
   dist[from] = 0;
 
+  // heuristic for A*
+  std::vector<float> h;
+  h.reserve(adjacency_matrix.size());
+  for (size_t i = 0; i < adjacency_matrix.size(); ++i) {
+      Location a = adjacency_matrix[to];
+      Location b = adjacency_matrix[i];
+      float diff_x = a.pos_x - b.pos_x;
+      float diff_y = a.pos_y - b.pos_y;
+      float euclidian_distance = std::sqrt(diff_x * diff_x + diff_y * diff_y);
+      h.push_back(euclidian_distance);
+  }
+
   // we store the distance additionally to the node, as to check for stale
   // references later, as we might push some neighbors multiple times
   std::vector<std::pair<size_t, float>> Q{{from, 0.0f}}; // <index, distance>
 
-  auto comp = [&](auto lhs, auto rhs){return lhs.second > rhs.second;};
+  auto comp = [&](auto lhs, auto rhs){
+      float dist_l = lhs.second;
+      float dist_r = rhs.second;
+      float h_l = h[lhs.first];
+      float h_r = h[rhs.first];
+      return (dist_l + h_l) > (dist_r + h_r);
+  };
   std::make_heap(Q.begin(),Q.end(),comp);
 
   // main loop
@@ -47,6 +68,8 @@ std::vector<size_t> ShortestPaths::compute_shortest_path(size_t from,
       std::pop_heap(Q.begin(), Q.end(), comp);
       auto [u, stored_distance] = Q.back();
       Q.pop_back();
+
+      num_visited += 1;
 
       if (stored_distance != dist[u]) {
           // this is a stale reference for u, indicating it was already
@@ -59,9 +82,9 @@ std::vector<size_t> ShortestPaths::compute_shortest_path(size_t from,
           break;
       }
 
-      Location location = adjacency_matrix[u];
+      Location location_u = adjacency_matrix[u];
       for (size_t v = 0; v < adjacency_matrix.size(); ++v) {
-          float dist_between = location[v].value_or(std::numeric_limits<float>::infinity());
+          float dist_between = location_u[v].value_or(std::numeric_limits<float>::infinity());
           if (std::isinf(dist_between)) {
               continue; // u and v are not neighbors
           }
@@ -75,6 +98,8 @@ std::vector<size_t> ShortestPaths::compute_shortest_path(size_t from,
           }
       }
   }
+
+  std::cout << "Nodes visited: " << num_visited << std::endl;
 
   // return path
   std::vector<size_t> path;
