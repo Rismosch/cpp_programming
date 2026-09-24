@@ -39,7 +39,9 @@ public:
   double
   stop() { // get time in ms and divide by 1000 ( to get 3-digit precision)
     const auto t_end = high_resolution_clock::now();
-    t_sec = static_cast<double>(duration_cast<milliseconds>(t_end - t_start_).count()) / 1e3;
+    t_sec = static_cast<double>(
+                duration_cast<milliseconds>(t_end - t_start_).count()) /
+            1e3;
     return t_sec;
   }
 
@@ -68,8 +70,7 @@ int sample_from_normal_distribution() {
 void print_hist(const vector<int> &h) {
   for (size_t i = 0; i != h.size(); ++i) {
     std::cout << std::setw(2) << i << '\t'
-              << std::string(static_cast<size_t>(h[i] / 10000), '*')
-              << '\n';
+              << std::string(static_cast<size_t>(h[i] / 10000), '*') << '\n';
   }
 }
 
@@ -91,12 +92,14 @@ std::vector<int> hist_critical(int N, int bins) {
   std::vector<int> hist(static_cast<size_t>(bins), 0);
 
   Timer t("Histogram calculation using a critical section.");
-  #pragma omp parallel for
+#pragma omp parallel for
   for (int i = 0; i < N; ++i) {
     int bin = sample_from_normal_distribution();
 
-    #pragma omp critical(add_critical)
-    { ++hist[static_cast<size_t>(bin)]; }
+#pragma omp critical(add_critical)
+    {
+      ++hist[static_cast<size_t>(bin)];
+    }
   }
   t.stop();
   return hist;
@@ -109,12 +112,12 @@ std::vector<int> hist_critical(int N, int bins) {
 std::vector<int> hist_element_lock(int N, int bins) {
   std::vector<int> hist(static_cast<size_t>(bins), 0);
   std::vector<omp_lock_t> locks(static_cast<size_t>(bins));
-  for (omp_lock_t &lock: locks) {
+  for (omp_lock_t &lock : locks) {
     omp_init_lock(&lock);
   }
 
   Timer t("Histogram with bin-wise locks");
-  #pragma omp parallel for
+#pragma omp parallel for
   for (int i = 0; i < N; ++i) {
     int bin = sample_from_normal_distribution();
     size_t index = static_cast<size_t>(bin);
@@ -125,7 +128,7 @@ std::vector<int> hist_element_lock(int N, int bins) {
   }
   t.stop();
 
-  for (omp_lock_t &lock: locks) {
+  for (omp_lock_t &lock : locks) {
     omp_destroy_lock(&lock);
   }
 
@@ -139,25 +142,28 @@ std::vector<int> hist_lockfree(int N, int bins) {
   std::vector<int> hist_large;
 
   Timer t("Histogram lock-free implementation.");
-  #pragma omp parallel
+#pragma omp parallel
   {
     int thread_count = omp_get_num_threads();
 
-    #pragma omp single
+#pragma omp single
     {
-      hist_large.resize(static_cast<size_t>(thread_count * bins)); // one section for each thread
+      hist_large.resize(static_cast<size_t>(
+          thread_count * bins)); // one section for each thread
     }
     int thread_num = omp_get_thread_num();
     int offset = thread_num * bins;
 
-    #pragma omp for
+#pragma omp for
     for (int i = 0; i < N; ++i) {
-      ++hist_large[static_cast<size_t>(offset + sample_from_normal_distribution())];
+      ++hist_large[static_cast<size_t>(offset +
+                                       sample_from_normal_distribution())];
     }
 
-    #pragma omp for
+#pragma omp for
     for (size_t i = 0; i < static_cast<size_t>(bins); ++i) {
-      for (size_t ithread = 0; ithread < static_cast<size_t>(thread_count); ++ithread) {
+      for (size_t ithread = 0; ithread < static_cast<size_t>(thread_count);
+           ++ithread) {
         size_t index = i + ithread * static_cast<size_t>(bins);
         hist[i] += hist_large[index];
       }

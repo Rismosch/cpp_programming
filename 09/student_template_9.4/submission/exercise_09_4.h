@@ -16,4 +16,3 @@ std::vector<int> hist_critical(int N, int bins);
 std::vector<int> hist_element_lock(int N, int bins);
 
 std::vector<int> hist_lockfree(int N, int bins);
-

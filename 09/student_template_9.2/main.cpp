@@ -1,8 +1,8 @@
 #include "submission/exercise_09_2.h"
 #include <cstdlib>
 #include <iostream>
-#include <thread>
 #include <map>
+#include <thread>
 
 int main() {
   std::map<long unsigned int, size_t> diff_count;
@@ -18,8 +18,9 @@ int main() {
 
   // output results
   std::string result;
-  for (auto& [diff, count] : diff_count) {
-    result += std::to_string(diff) + " difference was observed " + std::to_string(count) + " times\n";
+  for (auto &[diff, count] : diff_count) {
+    result += std::to_string(diff) + " difference was observed " +
+              std::to_string(count) + " times\n";
   }
   std::cout << result;
   return EXIT_SUCCESS;

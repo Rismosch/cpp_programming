@@ -19,7 +19,7 @@ concept ShapeImplemented = requires(TShape s, const Point3D p) {
 
 template <typename TShape>
 concept OperationsImplemented = requires(TShape s1, TShape s2) {
-  { s1 &s2 } -> std::same_as<Shape>;
+  { s1 & s2 } -> std::same_as<Shape>;
   { s1 | s2 } -> std::same_as<Shape>;
   { s1 ^ s2 } -> std::same_as<Shape>;
   { !s1 } -> std::same_as<Shape>;
@@ -28,16 +28,17 @@ concept OperationsImplemented = requires(TShape s1, TShape s2) {
 };
 
 template <typename TShape>
-concept TransformationsImplemented = requires(TShape s, Point3D p, Axis axis,
-                                              float angle) {
-  { s.translated(p) } -> std::same_as<Shape>;
-  { s.scaled(p) } -> std::same_as<Shape>;
-  { s.rotated(axis, angle) } -> std::same_as<Shape>;
-};
+concept TransformationsImplemented =
+    requires(TShape s, Point3D p, Axis axis, float angle) {
+      { s.translated(p) } -> std::same_as<Shape>;
+      { s.scaled(p) } -> std::same_as<Shape>;
+      { s.rotated(axis, angle) } -> std::same_as<Shape>;
+    };
 
 template <typename TShape>
-concept ShapeFullyImplemented = ShapeImplemented<TShape> &&
-    OperationsImplemented<TShape> && TransformationsImplemented<TShape>;
+concept ShapeFullyImplemented =
+    ShapeImplemented<TShape> && OperationsImplemented<TShape> &&
+    TransformationsImplemented<TShape>;
 
 // these tests will check at compile time if the necessary classes, functions,
 // and operations are implemented they only check for the type signatures, they
