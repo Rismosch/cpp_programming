@@ -1,3 +1,6 @@
+// Simon Sutoris 7542170
+// Eric Berger 7064584
+
 #include "shortest_paths.h"
 #include <algorithm>
 #include <cmath>
